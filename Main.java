@@ -7,7 +7,11 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStream;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+
+import com.udojava.evalex.Expression;
+
 import customfiles.*;
 
 public class Main {
@@ -49,8 +53,12 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        parse();
-        // parse(this.input); for GUI
-        showTree();
+        // parse();
+        // // parse(this.input); for GUI
+        // showTree();
+
+        Expression expression = new Expression("1+1/3");
+        BigDecimal result = expression.eval(); 
+        System.out.println(result);
     }
 }
