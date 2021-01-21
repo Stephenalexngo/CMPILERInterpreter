@@ -55,7 +55,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         parse();
         // parse(this.input); for GUI
-        // showTree();
+        showTree();
 
         // Expression expression = new Expression("1+1/3");
         // BigDecimal result = expression.eval(); 

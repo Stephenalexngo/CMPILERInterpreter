@@ -1,7 +1,10 @@
 grammar Main;	
 // Starting Node	
-start: (LINECOMMENT)* (function_declaration )* main_function EOF;
+start: (LINECOMMENT)* (function_declaration)* main_function EOF;
 // start: any_declaration EOF;
+
+// main function 
+main_function : MAIN OPEN_PAREN CLOSE_PAREN OPEN_BRACKET statements+ CLOSE_BRACKET;
 
 variable_type: (INT_DEC | BOOLEAN_DEC | FLOAT_DEC | STRING_DEC) ;
 number : INT_NUMBER | FLOAT_NUMBER ;
@@ -9,9 +12,7 @@ number : INT_NUMBER | FLOAT_NUMBER ;
 // Operators
 first_operators : (MULTI | DIV | MOD) ;
 second_operators : (PLUS | MINUS) ;
-logical_operators: (ANDAND | OROR) ;
-relational_operators: (LESS | LESSQEUAL | GREATER | GREATEREQUAL) ;
-other_operators : (logical_operators | relational_operators) ;
+logic_relational_operators: (LESS | LESSQEUAL | GREATER | GREATEREQUAL | ANDAND | OROR | EQUAL) ;
 
 // Parsers
 statements
@@ -52,16 +53,12 @@ variable_declaration_no_vartype
     : LABEL ASSIGN assigned_expression 
     ;
 
-array_size 
-    : expression
-    ;
-
 array_variable 
-    : LABEL OPEN_BRACE array_size CLOSE_BRACE
+    : LABEL OPEN_BRACE expression CLOSE_BRACE
     ;
 
 array_assign_body
-    : CREATE variable_type OPEN_BRACE array_size CLOSE_BRACE
+    : CREATE variable_type OPEN_BRACE expression CLOSE_BRACE
     ;
 
 array_assign
@@ -132,7 +129,7 @@ value_expression
 
 // comparison statement
 comparison_statement
-    : NOT? OPEN_PAREN value_comparison (relational_operators value_comparison)? CLOSE_PAREN (logical_operators comparison_statement)*
+    : NOT? OPEN_PAREN? value_comparison (logic_relational_operators (value_comparison | comparison_statement))* CLOSE_PAREN? (logic_relational_operators (value_comparison | comparison_statement))?
     ;
 
 value_comparison
@@ -244,27 +241,7 @@ scoping_statement
     : OPEN_BRACKET statements+ CLOSE_BRACKET
     ;
 
-// main function 
-main_function
-    : main_head main_body 
-    ;
-
-main_head
-    : MAIN OPEN_PAREN CLOSE_PAREN 
-    ;
-
-main_body
-    : OPEN_BRACKET statements+ CLOSE_BRACKET
-    ;
-
 // Lexers
-STRING_TYPE: '"' ~('"')* '"' ;
-INT_NUMBER: MINUS? DIGIT+; 
-FLOAT_NUMBER: MINUS? DIGIT+ (DOT DIGIT+)?;
-LABEL : LETTER LETTERORDIGIT* ;
-LETTER:[a-zA-Z_];
-DIGIT: [0-9];
-
 CREATE : 'create' ;
 CONSTANT : 'constant' ;
 RETURN : 'return' ;
@@ -320,11 +297,19 @@ SEMICOLON : ';' ;
 COMMA : ',' ;
 UNDERSCORE : '_' ;
 SINGLE_QUOTE : '\'' ;
-    
-WHITE_SPACE: [ \t\r\n]+ -> skip;
+
+STRING_TYPE: '"' ~('"')* '"' ;
+INT_NUMBER: MINUS? DIGIT+; 
+FLOAT_NUMBER: MINUS? DIGIT+ (DOT DIGIT+)?'f';
+LABEL : LETTER LETTERORDIGIT* ;
+
+LETTER:[a-zA-Z_];
+DIGIT: [0-9];
 
 fragment LETTERORDIGIT: DIGIT | LETTER;
 
 LINECOMMENT
     : '//' ~[\r\n]*
     ;
+
+WHITE_SPACE: [ \t\r\n]+ -> skip;

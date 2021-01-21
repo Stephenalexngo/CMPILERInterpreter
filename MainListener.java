@@ -17,6 +17,16 @@ public interface MainListener extends ParseTreeListener {
 	 */
 	void exitStart(MainParser.StartContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MainParser#main_function}.
+	 * @param ctx the parse tree
+	 */
+	void enterMain_function(MainParser.Main_functionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MainParser#main_function}.
+	 * @param ctx the parse tree
+	 */
+	void exitMain_function(MainParser.Main_functionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MainParser#variable_type}.
 	 * @param ctx the parse tree
 	 */
@@ -57,35 +67,15 @@ public interface MainListener extends ParseTreeListener {
 	 */
 	void exitSecond_operators(MainParser.Second_operatorsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MainParser#logical_operators}.
+	 * Enter a parse tree produced by {@link MainParser#logic_relational_operators}.
 	 * @param ctx the parse tree
 	 */
-	void enterLogical_operators(MainParser.Logical_operatorsContext ctx);
+	void enterLogic_relational_operators(MainParser.Logic_relational_operatorsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MainParser#logical_operators}.
+	 * Exit a parse tree produced by {@link MainParser#logic_relational_operators}.
 	 * @param ctx the parse tree
 	 */
-	void exitLogical_operators(MainParser.Logical_operatorsContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MainParser#relational_operators}.
-	 * @param ctx the parse tree
-	 */
-	void enterRelational_operators(MainParser.Relational_operatorsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MainParser#relational_operators}.
-	 * @param ctx the parse tree
-	 */
-	void exitRelational_operators(MainParser.Relational_operatorsContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MainParser#other_operators}.
-	 * @param ctx the parse tree
-	 */
-	void enterOther_operators(MainParser.Other_operatorsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MainParser#other_operators}.
-	 * @param ctx the parse tree
-	 */
-	void exitOther_operators(MainParser.Other_operatorsContext ctx);
+	void exitLogic_relational_operators(MainParser.Logic_relational_operatorsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MainParser#statements}.
 	 * @param ctx the parse tree
@@ -576,34 +566,4 @@ public interface MainListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitScoping_statement(MainParser.Scoping_statementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MainParser#main_function}.
-	 * @param ctx the parse tree
-	 */
-	void enterMain_function(MainParser.Main_functionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MainParser#main_function}.
-	 * @param ctx the parse tree
-	 */
-	void exitMain_function(MainParser.Main_functionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MainParser#main_head}.
-	 * @param ctx the parse tree
-	 */
-	void enterMain_head(MainParser.Main_headContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MainParser#main_head}.
-	 * @param ctx the parse tree
-	 */
-	void exitMain_head(MainParser.Main_headContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MainParser#main_body}.
-	 * @param ctx the parse tree
-	 */
-	void enterMain_body(MainParser.Main_bodyContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MainParser#main_body}.
-	 * @param ctx the parse tree
-	 */
-	void exitMain_body(MainParser.Main_bodyContext ctx);
 }

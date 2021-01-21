@@ -1,7 +1,7 @@
 main() {
     int x = 0;
     float _veryWeirdIdentifier567 = 999.9f;
-    bool y = (5 > 4 && T) || (F && !(x==0));
+    bool y = 5 > 4 || x==6|| (F && !(x==0));
     int[] myArray = create int[10];
     
     scan("What is the input: " ,x); //ask for user input
