@@ -1,12 +1,12 @@
 main() {
-    int x = 0;
+    int x = 0;// ask for input
     float _veryWeirdIdentifier567 = 999.9f;
-    bool y = 5 > 4 || x==6|| (F && !(x==0));
+    bool y = 5 > 4 || x==6|| (F && !(x==0));// ask for input
     int[] myArray = create int[10];
-    
-    scan("What is the input: " ,x); //ask for user input
-    print("Input: " +x); //print the input
-    
+    // ask for input
+    scan("What is the input: " ,x); // ask for input
+    print("Input: " +x); /* ask for input */
+    // ask for input
     for int i = 1 up to 5 {
         print("Hello world");
     }

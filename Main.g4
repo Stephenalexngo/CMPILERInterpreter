@@ -1,245 +1,84 @@
 grammar Main;	
 // Starting Node	
-start: (LINECOMMENT)* (function_declaration)* main_function EOF;
-// start: any_declaration EOF;
-
-// main function 
-main_function : MAIN OPEN_PAREN CLOSE_PAREN OPEN_BRACKET statements+ CLOSE_BRACKET;
+start: (function_declaration)* main_function EOF;
 
 variable_type: (INT_DEC | BOOLEAN_DEC | FLOAT_DEC | STRING_DEC) ;
 number : INT_NUMBER | FLOAT_NUMBER ;
 
 // Operators
-first_operators : (MULTI | DIV | MOD) ;
-second_operators : (PLUS | MINUS) ;
 logic_relational_operators: (LESS | LESSQEUAL | GREATER | GREATEREQUAL | ANDAND | OROR | EQUAL) ;
 
 // Parsers
-statements
-    : big_statements
-    | small_statements
-    | LINECOMMENT
-    ;
-
-big_statements
-    : (conditional_statement | loop_statement | constant_declaration | scoping_statement) LINECOMMENT? 
-    ;
-
-small_statements
-    : (print_statement | scan_statement | return_statement | any_declaration | function_calling) SEMICOLON LINECOMMENT?
-    ;
+statements: (big_statements | small_statements);
+big_statements: (conditional_statement | loop_statement | constant_declaration | scoping_statement);
+small_statements: (print_statement | scan_statement | return_statement | any_declaration | function_calling | assignment_statement) SEMICOLON;
 
 // Declarations
-any_declaration 
-    : variable_declaration_vartype
-    | variable_declaration_no_vartype
-    | array_declaration_vartype
-    | array_declaration_no_vartype
-    ; 
+any_declaration: (var_declaration | arr_declaration); 
+var_declaration: (float_declaration| int_declaration | string_declaration | boolean_declaration);
+arr_declaration: (float_arr_declaration | int_arr_declaration | string_arr_declaration | boolean_arr_declaration);
+float_arr_declaration: FLOAT_DEC OPEN_BRACE CLOSE_BRACE LABEL (ASSIGN (CREATE FLOAT_DEC | LABEL) OPEN_BRACE expression CLOSE_BRACE)?;
+int_arr_declaration: INT_DEC OPEN_BRACE CLOSE_BRACE LABEL (ASSIGN (CREATE INT_DEC | LABEL) OPEN_BRACE expression CLOSE_BRACE)?;
+string_arr_declaration: STRING_DEC OPEN_BRACE CLOSE_BRACE LABEL (ASSIGN (CREATE STRING_DEC) OPEN_BRACE expression CLOSE_BRACE)?;
+boolean_arr_declaration: BOOLEAN_DEC OPEN_BRACE CLOSE_BRACE LABEL (ASSIGN (CREATE BOOLEAN_DEC | LABEL) OPEN_BRACE expression CLOSE_BRACE)?;
+float_declaration: FLOAT_DEC LABEL (ASSIGN (FLOAT_NUMBER | expression))?;
+int_declaration: INT_DEC LABEL (ASSIGN (INT_NUMBER | expression))?;
+string_declaration: STRING_DEC LABEL (ASSIGN STRING_TYPE)?;
+boolean_declaration: BOOLEAN_DEC LABEL (ASSIGN (comparison_statement | LABEL))?;
 
-assigned_expression
-    : (STRING_TYPE | number | LABEL | expression | comparison_statement | function_calling) 
-    ;
+// assignment statement
+assignment_statement: LABEL (OPEN_BRACE CLOSE_BRACE)? ASSIGN (number | expression | STRING_TYPE | comparison_statement | LABEL (OPEN_BRACE CLOSE_BRACE)?);
 
-multiple_declaration
-    : LABEL (ASSIGN assigned_expression)?
-    ;
-
-variable_declaration_vartype
-    : variable_type multiple_declaration (COMMA multiple_declaration)*
-    ;
-
-variable_declaration_no_vartype
-    : LABEL ASSIGN assigned_expression 
-    ;
-
-array_variable 
-    : LABEL OPEN_BRACE expression CLOSE_BRACE
-    ;
-
-array_assign_body
-    : CREATE variable_type OPEN_BRACE expression CLOSE_BRACE
-    ;
-
-array_assign
-    :  ASSIGN array_assign_body
-    |  ASSIGN (array_variable | assigned_expression)
-    ;
-
-array_declaration_vartype
-    : variable_type OPEN_BRACE CLOSE_BRACE LABEL array_assign?
-    ;
-
-array_declaration_no_vartype
-    : array_variable array_assign
-    ;
- 
 // print statement
-print_statement
-    : PRINT OPEN_PAREN extended_value_print (PLUS extended_value_print)* CLOSE_PAREN
-    ;
-
-extended_value_print
-    : STRING_TYPE
-    | LABEL
-    | expression
-    | function_calling
-    ;
+print_statement: PRINT OPEN_PAREN extended_value_print (PLUS extended_value_print)* CLOSE_PAREN;
+extended_value_print: STRING_TYPE | LABEL | expression | function_calling;
 
 // scan statement
-scan_statement
-    : SCAN OPEN_PAREN STRING_TYPE COMMA LABEL CLOSE_PAREN
-    ;
+scan_statement: SCAN OPEN_PAREN STRING_TYPE COMMA LABEL CLOSE_PAREN;
 
 // constant declaration
-constant_declaration 
-    : CONSTANT any_declaration
-    ;
+constant_declaration : CONSTANT any_declaration;
 
 // return statement
-return_statement
-    : RETURN return_value
-    ;
-
-return_value
-    : (STRING_TYPE | number | LABEL | expression | function_calling)
-    ;
+return_statement: RETURN (STRING_TYPE | number | LABEL | expression | function_calling);
 
 // arithmetic statement
-expression
-    : second_operator_expression
-    ;
-
-second_operator_expression
-    : second_operator_expression second_operators first_operator_expression 
-    | first_operator_expression
-    ;
-
-first_operator_expression
-    : first_operator_expression first_operators value_expression
-    | value_expression
-    ;
-
-value_expression
-    : number
-    | OPEN_PAREN expression CLOSE_PAREN
-    | function_calling
-    | LABEL
-    ;
+expression: second_operator_expression;
+second_operator_expression: second_operator_expression PLUS first_operator_expression | second_operator_expression MINUS first_operator_expression | first_operator_expression;
+first_operator_expression: first_operator_expression DIV value_expression | first_operator_expression MULTI value_expression | first_operator_expression MOD value_expression | value_expression;
+value_expression: number | OPEN_PAREN expression CLOSE_PAREN | function_calling | LABEL;
 
 // comparison statement
-comparison_statement
-    : NOT? OPEN_PAREN? value_comparison (logic_relational_operators (value_comparison | comparison_statement))* CLOSE_PAREN? (logic_relational_operators (value_comparison | comparison_statement))?
-    ;
-
-value_comparison
-    : LABEL
-    | number
-    | expression
-    | STRING_TYPE
-    | function_calling
-    ;
+comparison_statement: NOT? OPEN_PAREN? value_comparison (logic_relational_operators (value_comparison | comparison_statement))* CLOSE_PAREN? (logic_relational_operators (value_comparison | comparison_statement))?;
+value_comparison: LABEL | number | expression | STRING_TYPE | function_calling;
 
 // conditional statement
-conditional_statement
-    : if_statement else_if_statement* else_statement? 
-    ;
-
-conditional_comparison_structure
-    : OPEN_PAREN comparison_statement CLOSE_PAREN THEN conditional_body
-    ;
-
-conditional_body
-    : OPEN_BRACKET statements+ CLOSE_BRACKET
-    ;
-
-if_statement
-    : IF conditional_comparison_structure
-    ;
-
-else_if_statement
-    : ELSE_IF conditional_comparison_structure
-    ;
-
-else_statement
-    : ELSE THEN conditional_body
-    ;
+conditional_statement: IF conditional_comparison_structure (ELSE_IF conditional_comparison_structure)* (ELSE THEN conditional_body)?;
+conditional_comparison_structure: OPEN_PAREN comparison_statement CLOSE_PAREN THEN conditional_body;
+conditional_body: OPEN_BRACKET statements+ CLOSE_BRACKET;
 
 // loop statement
-loop_statement
-    : while_statement
-    | for_statement
-    ;
-
-loop_conditional
-    : UP_TO
-    | DOWN_TO
-    ;
-
-loop_structure
-    : loop_conditional expression OPEN_BRACKET statements* CLOSE_BRACKET
-    ;
-
-loop_variable_declaration
-    : variable_type? LABEL (ASSIGN loop_expression)?
-    | expression
-    ;
-
-loop_expression
-    : (number | LABEL | expression)
-    ;
-
-while_statement
-    : WHILE expression loop_structure
-    ;
-
-for_statement
-    : FOR loop_variable_declaration loop_structure
-    ;
+loop_statement: (while_statement | for_statement);
+while_statement: WHILE expression loop_structure;
+for_statement: FOR loop_variable_declaration loop_structure;
+loop_variable_declaration: (variable_type? LABEL (ASSIGN (number | LABEL | expression))? | expression);
+loop_structure: (UP_TO | DOWN_TO) expression OPEN_BRACKET statements* CLOSE_BRACKET;
 
 // function calling
-function_calling
-    : LABEL OPEN_PAREN function_parameters? CLOSE_PAREN
-    ;
-
-function_parameters
-    : function_paremeters_value (COMMA function_paremeters_value)*
-    ; 
-
-function_paremeters_value
-    : (LABEL | expression | STRING_TYPE | number | function_calling)
-    ;
+function_calling: LABEL OPEN_PAREN function_parameters? CLOSE_PAREN;
+function_parameters: function_paremeters_value (COMMA function_paremeters_value)*; 
+function_paremeters_value: LABEL | expression | STRING_TYPE | number | function_calling;
 
 // function declaration
-function_declaration
-    : void_function
-    | non_void_function
-    ;
+function_declaration: FUNC (variable_type (OPEN_BRACE CLOSE_BRACE)? | VOID) function_structure;
+function_structure: LABEL OPEN_PAREN function_declaration_parameters? CLOSE_PAREN OPEN_BRACKET statements+ CLOSE_BRACKET ;
+function_declaration_parameters: variable_type (OPEN_BRACE CLOSE_BRACE)? LABEL COMMA function_declaration_parameters?;
 
-function_structure
-    : LABEL OPEN_PAREN function_declaration_parameters? CLOSE_PAREN OPEN_BRACKET statements+ CLOSE_BRACKET 
-    ;
-
-function_declaration_parameters
-    : variable_type (OPEN_BRACE CLOSE_BRACE)? LABEL function_declaration_parameters_body?
-    ;
-
-function_declaration_parameters_body
-    : COMMA function_declaration_parameters
-    ;
-
-void_function
-    : FUNC VOID function_structure
-    ;
-
-non_void_function
-    : FUNC variable_type (OPEN_BRACE CLOSE_BRACE)? function_structure
-    ;
+// main function 
+main_function : MAIN OPEN_PAREN CLOSE_PAREN OPEN_BRACKET statements+ CLOSE_BRACKET;
 
 // proper scoping
-scoping_statement
-    : OPEN_BRACKET statements+ CLOSE_BRACKET
-    ;
+scoping_statement: OPEN_BRACKET statements+ CLOSE_BRACKET;
 
 // Lexers
 CREATE : 'create' ;
@@ -308,8 +147,6 @@ DIGIT: [0-9];
 
 fragment LETTERORDIGIT: DIGIT | LETTER;
 
-LINECOMMENT
-    : '//' ~[\r\n]*
-    ;
-
+BLOCKCOMMENT: '/*' .*? '*/' -> skip;
+LINECOMMENT: '//' ~[\r\n]* -> skip;
 WHITE_SPACE: [ \t\r\n]+ -> skip;

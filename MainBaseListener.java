@@ -27,18 +27,6 @@ public class MainBaseListener implements MainListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMain_function(MainParser.Main_functionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMain_function(MainParser.Main_functionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterVariable_type(MainParser.Variable_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -58,30 +46,6 @@ public class MainBaseListener implements MainListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNumber(MainParser.NumberContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFirst_operators(MainParser.First_operatorsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFirst_operators(MainParser.First_operatorsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSecond_operators(MainParser.Second_operatorsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSecond_operators(MainParser.Second_operatorsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -147,121 +111,133 @@ public class MainBaseListener implements MainListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssigned_expression(MainParser.Assigned_expressionContext ctx) { }
+	@Override public void enterVar_declaration(MainParser.Var_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssigned_expression(MainParser.Assigned_expressionContext ctx) { }
+	@Override public void exitVar_declaration(MainParser.Var_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMultiple_declaration(MainParser.Multiple_declarationContext ctx) { }
+	@Override public void enterArr_declaration(MainParser.Arr_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMultiple_declaration(MainParser.Multiple_declarationContext ctx) { }
+	@Override public void exitArr_declaration(MainParser.Arr_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariable_declaration_vartype(MainParser.Variable_declaration_vartypeContext ctx) { }
+	@Override public void enterFloat_arr_declaration(MainParser.Float_arr_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariable_declaration_vartype(MainParser.Variable_declaration_vartypeContext ctx) { }
+	@Override public void exitFloat_arr_declaration(MainParser.Float_arr_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariable_declaration_no_vartype(MainParser.Variable_declaration_no_vartypeContext ctx) { }
+	@Override public void enterInt_arr_declaration(MainParser.Int_arr_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariable_declaration_no_vartype(MainParser.Variable_declaration_no_vartypeContext ctx) { }
+	@Override public void exitInt_arr_declaration(MainParser.Int_arr_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArray_size(MainParser.Array_sizeContext ctx) { }
+	@Override public void enterString_arr_declaration(MainParser.String_arr_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArray_size(MainParser.Array_sizeContext ctx) { }
+	@Override public void exitString_arr_declaration(MainParser.String_arr_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArray_variable(MainParser.Array_variableContext ctx) { }
+	@Override public void enterBoolean_arr_declaration(MainParser.Boolean_arr_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArray_variable(MainParser.Array_variableContext ctx) { }
+	@Override public void exitBoolean_arr_declaration(MainParser.Boolean_arr_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArray_assign_body(MainParser.Array_assign_bodyContext ctx) { }
+	@Override public void enterFloat_declaration(MainParser.Float_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArray_assign_body(MainParser.Array_assign_bodyContext ctx) { }
+	@Override public void exitFloat_declaration(MainParser.Float_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArray_assign(MainParser.Array_assignContext ctx) { }
+	@Override public void enterInt_declaration(MainParser.Int_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArray_assign(MainParser.Array_assignContext ctx) { }
+	@Override public void exitInt_declaration(MainParser.Int_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArray_declaration_vartype(MainParser.Array_declaration_vartypeContext ctx) { }
+	@Override public void enterString_declaration(MainParser.String_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArray_declaration_vartype(MainParser.Array_declaration_vartypeContext ctx) { }
+	@Override public void exitString_declaration(MainParser.String_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArray_declaration_no_vartype(MainParser.Array_declaration_no_vartypeContext ctx) { }
+	@Override public void enterBoolean_declaration(MainParser.Boolean_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArray_declaration_no_vartype(MainParser.Array_declaration_no_vartypeContext ctx) { }
+	@Override public void exitBoolean_declaration(MainParser.Boolean_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssignment_statement(MainParser.Assignment_statementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssignment_statement(MainParser.Assignment_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -322,18 +298,6 @@ public class MainBaseListener implements MainListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitReturn_statement(MainParser.Return_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterReturn_value(MainParser.Return_valueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitReturn_value(MainParser.Return_valueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -447,42 +411,6 @@ public class MainBaseListener implements MainListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIf_statement(MainParser.If_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitIf_statement(MainParser.If_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterElse_if_statement(MainParser.Else_if_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitElse_if_statement(MainParser.Else_if_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterElse_statement(MainParser.Else_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitElse_statement(MainParser.Else_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLoop_statement(MainParser.Loop_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -490,54 +418,6 @@ public class MainBaseListener implements MainListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLoop_statement(MainParser.Loop_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLoop_conditional(MainParser.Loop_conditionalContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLoop_conditional(MainParser.Loop_conditionalContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLoop_structure(MainParser.Loop_structureContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLoop_structure(MainParser.Loop_structureContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLoop_variable_declaration(MainParser.Loop_variable_declarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLoop_variable_declaration(MainParser.Loop_variable_declarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLoop_expression(MainParser.Loop_expressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLoop_expression(MainParser.Loop_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -562,6 +442,30 @@ public class MainBaseListener implements MainListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFor_statement(MainParser.For_statementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLoop_variable_declaration(MainParser.Loop_variable_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLoop_variable_declaration(MainParser.Loop_variable_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLoop_structure(MainParser.Loop_structureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLoop_structure(MainParser.Loop_structureContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -639,37 +543,13 @@ public class MainBaseListener implements MainListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunction_declaration_parameters_body(MainParser.Function_declaration_parameters_bodyContext ctx) { }
+	@Override public void enterMain_function(MainParser.Main_functionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunction_declaration_parameters_body(MainParser.Function_declaration_parameters_bodyContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterVoid_function(MainParser.Void_functionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVoid_function(MainParser.Void_functionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNon_void_function(MainParser.Non_void_functionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNon_void_function(MainParser.Non_void_functionContext ctx) { }
+	@Override public void exitMain_function(MainParser.Main_functionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
