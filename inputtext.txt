@@ -1,3 +1,27 @@
+func int[] append(int[] arr, int arr_size, int x) {
+    int[] newArr = create int[arr_size + 1];
+    
+    for i = 1 up to arr_size {
+        newArr[i] = arr[i];
+    }
+    
+    newArr[arr_size + 1] = x;
+    return newArr;
+}
+
+func int factorial(int n) {
+    if(n == 1) then {
+        return 1;
+    }
+    else then {
+        return n * factorial(n - 1);
+    }
+}
+
+func void callPrinter(String message) {
+    print(message);
+}
+
 main() {
     int x = 0;// ask for input
     float _veryWeirdIdentifier567 = 999.9f;

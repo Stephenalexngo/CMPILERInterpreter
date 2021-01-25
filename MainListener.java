@@ -227,16 +227,6 @@ public interface MainListener extends ParseTreeListener {
 	 */
 	void exitScan_statement(MainParser.Scan_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MainParser#constant_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterConstant_declaration(MainParser.Constant_declarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MainParser#constant_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitConstant_declaration(MainParser.Constant_declarationContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MainParser#return_statement}.
 	 * @param ctx the parse tree
 	 */
@@ -466,4 +456,24 @@ public interface MainListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitScoping_statement(MainParser.Scoping_statementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MainParser#left_bracket}.
+	 * @param ctx the parse tree
+	 */
+	void enterLeft_bracket(MainParser.Left_bracketContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MainParser#left_bracket}.
+	 * @param ctx the parse tree
+	 */
+	void exitLeft_bracket(MainParser.Left_bracketContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MainParser#right_bracket}.
+	 * @param ctx the parse tree
+	 */
+	void enterRight_bracket(MainParser.Right_bracketContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MainParser#right_bracket}.
+	 * @param ctx the parse tree
+	 */
+	void exitRight_bracket(MainParser.Right_bracketContext ctx);
 }
