@@ -48,7 +48,7 @@ value_expression: number | OPEN_PAREN expression CLOSE_PAREN | function_calling 
 
 // comparison statement
 comparison_statement: NOT? OPEN_PAREN? value_comparison (logic_relational_operators (value_comparison | comparison_statement))* CLOSE_PAREN? (logic_relational_operators (value_comparison | comparison_statement))?;
-value_comparison: LABEL | number | expression | STRING_TYPE | function_calling;
+value_comparison: LABEL | number | STRING_TYPE | function_calling;
 
 // conditional statement
 conditional_statement: IF conditional_comparison_structure (ELSE_IF conditional_comparison_structure)* (ELSE THEN conditional_body)?;
