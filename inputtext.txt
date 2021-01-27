@@ -1,37 +1,16 @@
-func int[] append(int[] arr, int arr_size, int x) {
-    int[] newArr = create int[arr_size + 1];
+func int myFunction(int x) {
+    int add = x + 50 ++ 1; //syntax error #1
     
-    for i = 1 up to arr_size {
-        newArr[i] = arr[i];
-    }
-    
-    newArr[arr_size + 1] = x;
-    return newArr;
+    return int; //syntax error #2
 }
 
-func int factorial(int n) {
-    if(n == 1) then {
-        return 1;
-    }
-    else then {
-        return n * factorial(n - 1);
-    }
-}
-
-func void callPrinter(String message) {
-    print(message);
+func float myFunctionFloat(float x) {
+    float fTest = (x * 50) + (x * 15)); //syntax error #3
+    
+    return fTest * 50 (); //syntax error #4
 }
 
 main() {
-    int x = 0;// ask for input
-    float _veryWeirdIdentifier567 = 999.9f;
-    bool y = 5 > 4 || x==6|| (F && !(x==0));// ask for input
-    int[] myArray = create int[10];
-    // ask for input
-    scan("What is the input: " ,x); // ask for input
-    print("Input: " +x); /* ask for input */
-    // ask for input
-    for int i = 1 up to 5 {
-        print("Hello world");
-    }
+    myFunction(50);
+    myFunctionFloat(50.0f);
 }
