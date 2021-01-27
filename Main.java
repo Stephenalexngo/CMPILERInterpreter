@@ -7,8 +7,10 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStream;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import com.udojava.evalex.Expression;
 
@@ -29,7 +31,7 @@ public class Main {
         viewer.open();
     }
 
-    public static void parse() throws Exception {
+    public static boolean parse() throws Exception {
         // CharStream cStream = CharStreams.fromString(this.input); for GUI
         CharStream cStream = CharStreams.fromFileName("inputtext.txt");
 
@@ -48,16 +50,30 @@ public class Main {
         walker.walk(new MainBaseListener(), tree);
 
         if(customErrorListener.getErrorList() == 0){
-            System.out.println("No Syntax Errors");
+            System.out.println("No Syntax Errors"); // should be in GUI
+            return true;
         }
+
+        return false;
+    }
+
+    public static void interpret() throws Exception {
+        File input_file = new File("inputtext.txt");
+        Scanner input = new Scanner(input_file);
+
+        
     }
 
     public static void main(String[] args) throws Exception {
-        parse();
         // parse(this.input); for GUI
-        showTree();
-
-        // Expression expression = new Expression("1+1/3");
+        if(parse()){
+            // showTree();
+            interpret();
+        }
+        
+        // int y=5;
+        // String x = "1+1/" + y;
+        // Expression expression = new Expression(x);
         // BigDecimal result = expression.eval(); 
         // System.out.println(result);
     }
