@@ -376,6 +376,23 @@ public class MyListener extends MainBaseListener {
     }
 
     @Override public void enterPrint_statement(MainParser.Print_statementContext ctx) {
-        
+        for(int x=0; x<ctx.extended_value_print().size(); x++){
+            if(ctx.extended_value_print().get(x).expression() != null){
+                Token first = ctx.extended_value_print().get(x).start;
+                Token last = ctx.extended_value_print().get(x).stop;
+                String expr = convertExpression(tokens.getTokens(first.getTokenIndex(), last.getTokenIndex()),varTable);
+
+                if(!expr.equals("null")){
+                    // put in PrintCommand
+                }
+            }
+            else if(ctx.extended_value_print().get(x).LABEL() != null){
+                String key = ctx.extended_value_print().get(x).LABEL().getText();
+                if(!varTable.containsKey(key) && !varArrTable.containsKey(key)){
+                    errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", key, ctx.getStart().getLine());
+                }
+            }
+            // add else for STRING_TYPE() to put in PrintCommand
+        }
     }
 }

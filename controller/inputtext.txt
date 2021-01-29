@@ -1,7 +1,4 @@
 main() {
     int x = 0;
-    String[] x = create String[1];
-    int[] y = create int[1];
-    bool[] z = create bool[1];
-    float[] x = create float[1];
+    print("hello" + x + (x+2));
 }
