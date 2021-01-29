@@ -1,4 +1,4 @@
-package view;
+package ui;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import java.io.Console;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.function.IntFunction;
@@ -29,6 +28,8 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
+
+import controller.*;
 
 public class gui extends Application {
 
@@ -56,10 +57,6 @@ public class gui extends Application {
         "|(?<COMMENT>" + COMMENT_PATTERN + ")"
       );
 
-    public static void main(String[] args) throws Exception {
-        launch(args);
-    }
-
     @Override
     public void start(Stage primaryStage) {
         CodeArea codeArea = new CodeArea();
@@ -67,16 +64,7 @@ public class gui extends Application {
         TextArea console = new TextArea();
         console.setEditable(false);
 
-        Button btnCompile = new Button("Compile");
-        btnCompile.setOnAction(new EventHandler<ActionEvent>() {
- 
-            @Override
-            public void handle(ActionEvent event) {
-                console.appendText("COMPILED \n");
-            }
-        });
-
-        
+        Button btnCompile = new Button("Compile");        
 
         HBox hbox = new HBox(btnCompile);
         hbox.setAlignment(Pos.BASELINE_CENTER);
@@ -103,6 +91,20 @@ public class gui extends Application {
         btnCompile.setPrefSize(80, 30);
 
         codeArea.getStylesheets().add(stylesheet);
+
+        btnCompile.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+                try{
+                    Controller.parse();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                
+                console.appendText("COMPILED \n");
+            }
+        });
 
         border.setTop(hbox);
         border.setCenter(codeArea);

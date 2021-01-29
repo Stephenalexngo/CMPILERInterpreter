@@ -21,9 +21,9 @@ import commandfiles.*;
 import model.*;
 import grammarfile.*;
 
-public class Main {
+public class Controller {
     public static void showTree() throws Exception {
-        CharStream cStream = CharStreams.fromFileName("controller/inputtext.txt");
+        CharStream cStream = CharStreams.fromFileName("inputtext.txt");
         Lexer lexer = new MainLexer(cStream);
         TokenStream tokenStream = new CommonTokenStream(lexer);
         MainParser parser = new MainParser(tokenStream);
@@ -37,7 +37,7 @@ public class Main {
 
     public static boolean parse() throws Exception {
         // CharStream cStream = CharStreams.fromString(this.input); for GUI
-        CharStream cStream = CharStreams.fromFileName("controller/inputtext.txt");
+        CharStream cStream = CharStreams.fromFileName("inputtext.txt");
 
         CustomErrorListener customErrorListener = new CustomErrorListener();
         Lexer lexer = new MainLexer(cStream);
@@ -59,18 +59,5 @@ public class Main {
         }
 
         return false;
-    }
-
-    public static void main(String[] args) throws Exception {
-        // parse(this.input); for GUI
-        if(parse()){
-            // showTree();
-        }
-
-        // String x = "3.14+2.14";
-        // Expression expression = new Expression(x);
-        // expression.setPrecision(3);
-        // BigDecimal result = expression.eval(); 
-        // System.out.println(result);
     }
 }
