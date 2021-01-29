@@ -1,4 +1,4 @@
 main() {
-    int x=0;
-    int x=z;
+    int x=1;
+    bool y = T;
 }
