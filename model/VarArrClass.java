@@ -1,20 +1,20 @@
 package model;
 
-public class VarClass {
+public class VarArrClass {
     private String datatype;
     private String varname;
-    private String value;
+    private String size;
 
-    public VarClass(String type, String name){
+    public VarArrClass(String type, String name){
         this.datatype = type;
         this.varname = name;
-        this.value = "null";
+        this.size = "null";
     }
 
-    public VarClass(String type, String name, String value){
+    public VarArrClass(String type, String name, String size){
         this.datatype = type;
         this.varname = name;
-        this.value = value;
+        this.size = size;
     }
 
     public String getType(){
@@ -25,7 +25,7 @@ public class VarClass {
         return this.varname;
     }
 
-    public String getValue(){
-        return this.value;
+    public String getSize(){
+        return this.size;
     }
 }

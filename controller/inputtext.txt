@@ -1,4 +1,4 @@
 main() {
     int x=1;
-    bool y = T;
+    int[] x = create int[1.43];
 }

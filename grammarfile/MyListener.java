@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.Token;
 
 import errorfiles.ErrorRepository;
 import model.SymbolTableManager;
+import model.VarArrClass;
 import model.VarClass;
 
 import java.math.BigDecimal;
@@ -18,6 +19,8 @@ public class MyListener extends MainBaseListener {
     public CommonTokenStream tokens;
     public Expression EvalEx;
     public ErrorRepository errorRepo;
+    HashMap<String, VarClass> varTable = SymbolTableManager.getInstance().getVarTable();
+    HashMap<String, VarArrClass> varArrTable = SymbolTableManager.getInstance().getVarArrTable();
 
     public MyListener(MainParser parser){
         this.tokens = (CommonTokenStream) parser.getTokenStream();
@@ -88,7 +91,6 @@ public class MyListener extends MainBaseListener {
     }
 
     @Override public void enterInt_declaration(MainParser.Int_declarationContext ctx) {
-        HashMap<String, VarClass> varTable = SymbolTableManager.getInstance().getVarTable();
         String expr = "";
 
         if(ctx.expression() != null){
@@ -100,34 +102,35 @@ public class MyListener extends MainBaseListener {
             expr = ctx.INT_NUMBER().getText();
         }
         
-        if(!varTable.containsKey(ctx.LABEL().getText())){
+        if(!varTable.containsKey(ctx.LABEL().getText()) && !varArrTable.containsKey(ctx.LABEL().getText())){
             if(!expr.equals("null")){
                 String type = ctx.INT_DEC().getText();
                 String varname = ctx.LABEL().getText();
 
                 if(!expr.equals("")){
-                    EvalEx = new Expression(expr);
-                    BigDecimal result = EvalEx.eval();
-                    
-                    String value = result.intValue()+"";
+                    if(!expr.contains(".")){
+                        EvalEx = new Expression(expr);
+                        BigDecimal result = EvalEx.eval();
+                        String value = result.intValue()+"";
 
-                    if(!value.contains("."))
                         varTable.put(varname, new VarClass(type, varname, value));
+                    }
                     else
                         errorRepo.reportErrorMessage("TYPE_MISMATCH",ctx.LABEL().getText() ,ctx.getStart().getLine());
                 }
                 else{
-                    varTable.put(varname, new VarClass(type, varname, "null"));
+                    varTable.put(varname, new VarClass(type, varname));
                 }   
             }
         }
         else{
             errorRepo.reportErrorMessage("MULTIPLE_VARIABLE",ctx.LABEL().getText() ,ctx.getStart().getLine());
         }
+
+        SymbolTableManager.getInstance().setVarTable(varTable);
     }
 
     @Override public void enterFloat_declaration(MainParser.Float_declarationContext ctx) {
-        HashMap<String, VarClass> varTable = SymbolTableManager.getInstance().getVarTable();
         String expr = "";
 
         if(ctx.expression() != null){
@@ -139,7 +142,7 @@ public class MyListener extends MainBaseListener {
             expr = ctx.FLOAT_NUMBER().getText().replace("f", "");
         }
         
-        if(!varTable.containsKey(ctx.LABEL().getText())){
+        if(!varTable.containsKey(ctx.LABEL().getText()) && !varArrTable.containsKey(ctx.LABEL().getText())){
             if(!expr.equals("null")){
                 String type = ctx.FLOAT_DEC().getText();
                 String varname = ctx.LABEL().getText();
@@ -153,24 +156,25 @@ public class MyListener extends MainBaseListener {
                     varTable.put(varname, new VarClass(type, varname, value));
                 }
                 else{
-                    varTable.put(varname, new VarClass(type, varname, "null"));
+                    varTable.put(varname, new VarClass(type, varname));
                 }   
             }
         }
         else{
             errorRepo.reportErrorMessage("MULTIPLE_VARIABLE",ctx.LABEL().getText() ,ctx.getStart().getLine());
         }
+
+        SymbolTableManager.getInstance().setVarTable(varTable);
     }
 
     @Override public void enterString_declaration(MainParser.String_declarationContext ctx) {
-        HashMap<String, VarClass> varTable = SymbolTableManager.getInstance().getVarTable();
         String expr = "";
 
         if(ctx.STRING_TYPE() != null){
             expr = ctx.STRING_TYPE().getText();
         }
         
-        if(!varTable.containsKey(ctx.LABEL().getText())){
+        if(!varTable.containsKey(ctx.LABEL().getText()) && !varArrTable.containsKey(ctx.LABEL().getText())){
             String type = ctx.STRING_DEC().getText();
             String varname = ctx.LABEL().getText();
 
@@ -179,16 +183,17 @@ public class MyListener extends MainBaseListener {
                 varTable.put(varname, new VarClass(type, varname, expr));
             }
             else{
-                varTable.put(varname, new VarClass(type, varname, "null"));
+                varTable.put(varname, new VarClass(type, varname));
             }
         }
         else{
             errorRepo.reportErrorMessage("MULTIPLE_VARIABLE",ctx.LABEL().getText() ,ctx.getStart().getLine());
         }
+
+        SymbolTableManager.getInstance().setVarTable(varTable);
     }
 
     @Override public void enterBoolean_declaration(MainParser.Boolean_declarationContext ctx) {
-        HashMap<String, VarClass> varTable = SymbolTableManager.getInstance().getVarTable();
         String expr = "";
 
         if(ctx.comparison_statement() != null){
@@ -197,7 +202,7 @@ public class MyListener extends MainBaseListener {
             expr = convertLogical(tokens.getTokens(first.getTokenIndex(), last.getTokenIndex()),varTable);
         }
         
-        if(!varTable.containsKey(ctx.LABEL().get(0).getText())){
+        if(!varTable.containsKey(ctx.LABEL().get(0).getText()) && !varArrTable.containsKey(ctx.LABEL().get(0).getText())){
             if(!expr.equals("null")){
                 String type = ctx.BOOLEAN_DEC().getText();
                 String varname = ctx.LABEL().get(0).getText();
@@ -211,12 +216,51 @@ public class MyListener extends MainBaseListener {
                     varTable.put(varname, new VarClass(type, varname, value));
                 }
                 else{
-                    varTable.put(varname, new VarClass(type, varname, "null"));
+                    varTable.put(varname, new VarClass(type, varname));
                 }   
             }
         }
         else{
             errorRepo.reportErrorMessage("MULTIPLE_VARIABLE",ctx.LABEL().get(0).getText() ,ctx.getStart().getLine());
         }
+
+        SymbolTableManager.getInstance().setVarTable(varTable);
+    }
+
+    @Override public void enterInt_arr_declaration(MainParser.Int_arr_declarationContext ctx) { 
+        String size = "";
+
+        if(ctx.expression() != null){
+            Token first = ctx.expression().start;
+            Token last = ctx.expression().stop;
+            size = convertExpression(tokens.getTokens(first.getTokenIndex(), last.getTokenIndex()),varTable);
+        }
+        
+        if(!varArrTable.containsKey(ctx.LABEL().get(0).getText()) && !varTable.containsKey(ctx.LABEL().get(0).getText())){
+            if(!size.equals("null")){
+                String type = ctx.INT_DEC().get(0).getText();
+                String varname = ctx.LABEL().get(0).getText();
+
+                if(!size.equals("")){
+                    if(!size.contains(".")){
+                        EvalEx = new Expression(size);
+                        BigDecimal result = EvalEx.eval();
+                        String value = result.intValue()+"";
+
+                        varArrTable.put(varname, new VarArrClass(type, varname, value));
+                    }
+                    else
+                        errorRepo.reportErrorMessage("TYPE_MISMATCH",ctx.LABEL().get(0).getText() ,ctx.getStart().getLine());
+                    }
+                else{
+                    varArrTable.put(varname, new VarArrClass(type, varname));
+                }   
+            }
+        }
+        else{
+            errorRepo.reportErrorMessage("MULTIPLE_VARIABLE",ctx.LABEL().get(0).getText() ,ctx.getStart().getLine());
+        }
+
+        SymbolTableManager.getInstance().setVarArrTable(varArrTable);
     }
 }
