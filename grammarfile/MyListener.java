@@ -3,6 +3,7 @@ package grammarfile;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 
+import errorfiles.ErrorRepository;
 import model.SymbolTableManager;
 import model.VarClass;
 
@@ -16,9 +17,11 @@ public class MyListener extends MainBaseListener {
     
     public CommonTokenStream tokens;
     public Expression EvalEx;
+    public ErrorRepository errorRepo;
 
     public MyListener(MainParser parser){
-        tokens = (CommonTokenStream) parser.getTokenStream();
+        this.tokens = (CommonTokenStream) parser.getTokenStream();
+        this.errorRepo = new ErrorRepository();
     }
 
     public String convertExpression(List<Token> listtoken, HashMap<String, VarClass> varTable){
@@ -30,12 +33,12 @@ public class MyListener extends MainBaseListener {
                     if(!varTable.get(listtoken.get(x).getText()).getValue().isEmpty())
                         expression += varTable.get(listtoken.get(x).getText()).getValue();
                     else{
-                        System.out.println("Variable not initialized at line " + listtoken.get(x).getLine());
+                        errorRepo.reportErrorMessage("UNDECLARED_VARIABLE",listtoken.get(x).getText() ,listtoken.get(x).getLine());
                         return "null";
                     }
                 }
                 else{
-                    System.out.println("Variable not declared at line " + listtoken.get(x).getLine());
+                    errorRepo.reportErrorMessage("UNDECLARED_VARIABLE",listtoken.get(x).getText() ,listtoken.get(x).getLine());
                     return "null";
                 }
             }
@@ -79,7 +82,7 @@ public class MyListener extends MainBaseListener {
             }
         }
         else{
-            System.out.println("Variable already declared at line " + ctx.getStart().getLine());
+            errorRepo.reportErrorMessage("MULTIPLE_VARIABLE",ctx.LABEL().getText() ,ctx.getStart().getLine());
         }
     }
 

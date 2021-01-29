@@ -9,9 +9,12 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStream;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+
+import com.udojava.evalex.Expression;
 
 import customfiles.*;
 import commandfiles.*;
@@ -64,9 +67,9 @@ public class Main {
             // showTree();
         }
 
-        // int y=5;
-        // String x = "1+1/" + y;
+        // String x = "3.14+2.14";
         // Expression expression = new Expression(x);
+        // expression.setPrecision(3);
         // BigDecimal result = expression.eval(); 
         // System.out.println(result);
     }
