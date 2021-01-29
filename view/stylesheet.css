@@ -1,0 +1,20 @@
+
+.keyword{
+    -fx-fill: white !important;
+}
+
+.paren{
+    -fx-fill: red !important;
+}
+
+.paragraph-text .text{
+    -fx-fill: yellow;
+}
+
+.styled-text-area {
+    -fx-background-color: #323232;
+}
+
+.paragraph-box{
+    -fx-background-color: rgb(80, 80, 80);
+}
