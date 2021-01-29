@@ -19,11 +19,6 @@ import model.*;
 import grammarfile.*;
 
 public class Main {
-
-    static ArrayList<ICommand> arrCommand = new ArrayList<ICommand>();
-    static ArrayList<String> semanticMessage = new ArrayList<String>();
-    static HashMap<String, VarClass> varTable = new HashMap<String, VarClass>();
-
     public static void showTree() throws Exception {
         CharStream cStream = CharStreams.fromFileName("controller/inputtext.txt");
         Lexer lexer = new MainLexer(cStream);
@@ -66,9 +61,9 @@ public class Main {
     public static void main(String[] args) throws Exception {
         // parse(this.input); for GUI
         if(parse()){
-            showTree();
+            // showTree();
         }
-        
+
         // int y=5;
         // String x = "1+1/" + y;
         // Expression expression = new Expression(x);

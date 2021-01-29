@@ -21,11 +21,27 @@ public class MyListener extends MainBaseListener {
         tokens = (CommonTokenStream) parser.getTokenStream();
     }
 
-    public String convertExpression(List<Token> listtoken){
+    public String convertExpression(List<Token> listtoken, HashMap<String, VarClass> varTable){
         String expression = "";
 
         for(int x=0; x<listtoken.size(); x++){
-            expression += listtoken.get(x).getText();
+            if(listtoken.get(x).getType() == 51){
+                if(varTable.containsKey(listtoken.get(x).getText())){
+                    if(!varTable.get(listtoken.get(x).getText()).getValue().isEmpty())
+                        expression += varTable.get(listtoken.get(x).getText()).getValue();
+                    else{
+                        System.out.println("Variable not initialized at line " + listtoken.get(x).getLine());
+                        return "null";
+                    }
+                }
+                else{
+                    System.out.println("Variable not declared at line " + listtoken.get(x).getLine());
+                    return "null";
+                }
+            }
+            else{
+                expression += listtoken.get(x).getText();
+            }
         }
 
         return expression;
@@ -33,24 +49,41 @@ public class MyListener extends MainBaseListener {
 
     @Override public void enterInt_declaration(MainParser.Int_declarationContext ctx) {
         HashMap<String, VarClass> varTable = SymbolTableManager.getInstance().getVarTable();
-        Token first = ctx.expression().start;
-        Token last = ctx.expression().stop;
+        String expr = "";
+
+        if(ctx.expression() != null){
+            Token first = ctx.expression().start;
+            Token last = ctx.expression().stop;
+            expr = convertExpression(tokens.getTokens(first.getTokenIndex(), last.getTokenIndex()),varTable);
+        }
+        else if(ctx.INT_NUMBER() != null){
+            expr = ctx.INT_NUMBER().getText();
+        }
         
         if(!varTable.containsKey(ctx.LABEL().getText())){
-            String type = ctx.INT_DEC().getText();
-            String varname = ctx.LABEL().getText();
-            String expr = convertExpression(tokens.getTokens(first.getTokenIndex(), last.getTokenIndex()));
-            
-            System.out.println(expr);
-            EvalEx = new Expression(expr);
-            BigDecimal result = EvalEx.eval();
-            
-            String value = result.intValue()+"";
+            if(!expr.equals("null")){
+                String type = ctx.INT_DEC().getText();
+                String varname = ctx.LABEL().getText();
 
-            varTable.put(varname, new VarClass(type, varname, value));
+                if(!expr.equals("")){
+                    EvalEx = new Expression(expr);
+                    BigDecimal result = EvalEx.eval();
+                    
+                    String value = result.intValue()+"";
+
+                    varTable.put(varname, new VarClass(type, varname, value));
+                }
+                else{
+                    varTable.put(varname, new VarClass(type, varname, "null"));
+                }   
+            }
         }
         else{
-            System.out.println("Variable Already Declared at line " + ctx.getStart().getLine());
+            System.out.println("Variable already declared at line " + ctx.getStart().getLine());
         }
+    }
+
+    @Override public void enterFloat_declaration(MainParser.Float_declarationContext ctx) {
+        
     }
 }
