@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Main",
+            "request": "launch",
+            "mainClass": "controller.Main",
+            "projectName": "CMPILERInterpreter_cdde3fc"
+        },
+        {
+            "type": "java",
             "name": "Launch JavaKeywordsAsyncDemo",
             "request": "launch",
             "mainClass": "JavaKeywordsAsyncDemo",

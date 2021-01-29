@@ -1,3 +1,5 @@
+package controller;
+
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
@@ -7,19 +9,23 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStream;
 
-import java.io.File;
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
-
-import com.udojava.evalex.Expression;
+import java.util.HashMap;
 
 import customfiles.*;
+import commandfiles.*;
+import model.*;
+import grammarfile.*;
 
 public class Main {
 
+    static ArrayList<ICommand> arrCommand = new ArrayList<ICommand>();
+    static ArrayList<String> semanticMessage = new ArrayList<String>();
+    static HashMap<String, VarClass> varTable = new HashMap<String, VarClass>();
+
     public static void showTree() throws Exception {
-        CharStream cStream = CharStreams.fromFileName("inputtext.txt");
+        CharStream cStream = CharStreams.fromFileName("controller/inputtext.txt");
         Lexer lexer = new MainLexer(cStream);
         TokenStream tokenStream = new CommonTokenStream(lexer);
         MainParser parser = new MainParser(tokenStream);
@@ -33,7 +39,7 @@ public class Main {
 
     public static boolean parse() throws Exception {
         // CharStream cStream = CharStreams.fromString(this.input); for GUI
-        CharStream cStream = CharStreams.fromFileName("inputtext.txt");
+        CharStream cStream = CharStreams.fromFileName("controller/inputtext.txt");
 
         CustomErrorListener customErrorListener = new CustomErrorListener();
         Lexer lexer = new MainLexer(cStream);
@@ -47,7 +53,7 @@ public class Main {
         ParseTree tree = parser.start();
         ParseTreeWalker walker = new ParseTreeWalker();
 
-        walker.walk(new MainBaseListener(), tree);
+        walker.walk(new MyListener(parser), tree);
 
         if(customErrorListener.getErrorList() == 0){
             System.out.println("No Syntax Errors"); // should be in GUI
@@ -57,18 +63,10 @@ public class Main {
         return false;
     }
 
-    public static void interpret() throws Exception {
-        File input_file = new File("inputtext.txt");
-        Scanner input = new Scanner(input_file);
-
-        
-    }
-
     public static void main(String[] args) throws Exception {
         // parse(this.input); for GUI
         if(parse()){
-            // showTree();
-            interpret();
+            showTree();
         }
         
         // int y=5;
