@@ -37,17 +37,20 @@ public class gui extends Application {
         "create", "constant", "return", "print", "scan", "void",
         "func", "main", "if", "else", "else if", "then", "for",
         "up to", "down to", "while", "int", "bool", "float", "String",
-      };
+    };
+
+    //private static final String[] VAR_NAMES;
+
+    private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
+    private static final String PAREN_PATTERN = "\\(|\\)";
+    private static final String BRACE_PATTERN = "\\{|\\}";
+    private static final String BRACKET_PATTERN = "\\[|\\]";
+    private static final String SEMICOLON_PATTERN = "\\;";
+    private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
+    private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
+    //private static final String VAR_PATTERN = "\\b(" + String.join("|", VAR_NAMES) + ")\\b";
     
-      private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
-      private static final String PAREN_PATTERN = "\\(|\\)";
-      private static final String BRACE_PATTERN = "\\{|\\}";
-      private static final String BRACKET_PATTERN = "\\[|\\]";
-      private static final String SEMICOLON_PATTERN = "\\;";
-      private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
-      private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
-    
-      private static final Pattern PATTERN = Pattern.compile(
+    private static final Pattern PATTERN = Pattern.compile(
         "(?<KEYWORD>" + KEYWORD_PATTERN + ")" +
         "|(?<PAREN>" + PAREN_PATTERN + ")" +
         "|(?<BRACE>" + BRACE_PATTERN + ")" +
@@ -55,7 +58,7 @@ public class gui extends Application {
         "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")" +
         "|(?<STRING>" + STRING_PATTERN + ")" +
         "|(?<COMMENT>" + COMMENT_PATTERN + ")"
-      );
+    );
 
     @Override
     public void start(Stage primaryStage) {
