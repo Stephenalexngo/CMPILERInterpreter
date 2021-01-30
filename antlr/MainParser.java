@@ -1,4 +1,6 @@
 // Generated from c:\Users\Lenard\Documents\CMPILERParser\Main.g4 by ANTLR 4.8
+package antlr;
+
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;

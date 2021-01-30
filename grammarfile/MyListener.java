@@ -395,4 +395,8 @@ public class MyListener extends MainBaseListener {
             // add else for STRING_TYPE() to put in PrintCommand
         }
     }
+
+    @Override public void enterScan_statement(MainParser.Scan_statementContext ctx) { 
+        
+    }
 }
