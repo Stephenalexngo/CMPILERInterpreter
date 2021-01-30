@@ -22,9 +22,8 @@ import model.*;
 import grammarfile.*;
 
 public class Controller {
-    public static void showTree() throws Exception {
-        // CharStream cStream = CharStreams.fromString(this.input); for GUI
-        CharStream cStream = CharStreams.fromFileName("inputtext.txt");
+    public static void showTree(String input) throws Exception {
+        CharStream cStream = CharStreams.fromString(input);
         Lexer lexer = new MainLexer(cStream);
         TokenStream tokenStream = new CommonTokenStream(lexer);
         MainParser parser = new MainParser(tokenStream);
@@ -37,7 +36,6 @@ public class Controller {
     }
 
     public static boolean parse(String input) throws Exception {
-        // CharStream cStream = CharStreams.fromString(this.input); for GUI
         SymbolTableManager.initialize();
 
         CharStream cStream = CharStreams.fromString(input);

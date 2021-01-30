@@ -19,6 +19,7 @@ public class MyListener extends MainBaseListener {
     public CommonTokenStream tokens;
     public Expression EvalEx;
     public ErrorRepository errorRepo;
+    public String currentFunction = "";
     HashMap<String, VarClass> varTable = SymbolTableManager.getInstance().getVarTable();
     HashMap<String, VarArrClass> varArrTable = SymbolTableManager.getInstance().getVarArrTable();
 
@@ -92,7 +93,7 @@ public class MyListener extends MainBaseListener {
 
     @Override public void enterInt_declaration(MainParser.Int_declarationContext ctx) {
         String expr = "";
-
+        System.out.println(currentFunction);
         if(ctx.expression() != null){
             Token first = ctx.expression().start;
             Token last = ctx.expression().stop;
@@ -397,6 +398,16 @@ public class MyListener extends MainBaseListener {
     }
 
     @Override public void enterScan_statement(MainParser.Scan_statementContext ctx) { 
-        
+        if(!varTable.containsKey(ctx.LABEL().getText())){
+            errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", ctx.LABEL().getText(), ctx.getStart().getLine());
+        }
+    }
+
+    @Override public void enterFunction_declaration(MainParser.Function_declarationContext ctx) { 
+        currentFunction = ctx.function_structure().LABEL().getText();
+    }
+
+    @Override public void enterMain_function(MainParser.Main_functionContext ctx) { 
+        currentFunction = ctx.MAIN().getText();
     }
 }

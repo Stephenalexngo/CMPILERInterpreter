@@ -98,6 +98,7 @@ public class gui extends Application {
             public void handle(ActionEvent event) {
                 try{
                     if(Controller.parse(codeArea.getText())){
+                        Controller.showTree(codeArea.getText());
                         // interpret();
                     }else{
                         // send error
