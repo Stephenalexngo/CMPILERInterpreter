@@ -33,6 +33,8 @@ import controller.*;
 
 public class gui extends Application {
 
+    public static TextArea console = new TextArea();
+
     private static final String[] KEYWORDS = new String[] {
         "create", "constant", "return", "print", "scan", "void",
         "func", "main", "if", "else", "else if", "then", "for",
@@ -64,7 +66,7 @@ public class gui extends Application {
     public void start(Stage primaryStage) {
         CodeArea codeArea = new CodeArea();
 
-        TextArea console = new TextArea();
+
         console.setEditable(false);
 
         Button btnCompile = new Button("Compile");        
@@ -79,6 +81,7 @@ public class gui extends Application {
         
 
         String stylesheet = gui.class.getResource("stylesheet.css").toExternalForm();
+        String console_style = gui.class.getResource("console_style.css").toExternalForm();
 
         
         IntFunction<String> format = (digits -> " %" + digits + "d ");
@@ -118,7 +121,9 @@ public class gui extends Application {
         border.setCenter(codeArea);
         border.setBottom(console);
 
-        Scene scene = new Scene(border, 1000, 800);
+        Scene scene = new Scene(border, 800, 600);
+
+        scene.getStylesheets().add(console_style);
                 
 
         primaryStage.setScene(scene);
