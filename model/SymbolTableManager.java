@@ -3,13 +3,11 @@ package model;
 import java.util.HashMap;
 
 public class SymbolTableManager {
-    public static HashMap<String, VarArrClass> arrTable;
-    public static HashMap<String, VarClass> varTable;
+    private static HashMap<String, FuncClass> funcTable;
     private static SymbolTableManager INSTANCE = null;
 
     private SymbolTableManager(){
-        varTable = new HashMap<String, VarClass>();
-        arrTable = new HashMap<String, VarArrClass>();
+        funcTable = new HashMap<String, FuncClass>();
     }
 
     public static void initialize(){
@@ -23,19 +21,11 @@ public class SymbolTableManager {
         return INSTANCE;
     }
 
-    public HashMap<String, VarArrClass> getVarArrTable(){
-        return this.arrTable;
+    public HashMap<String, FuncClass> getFuncTable(){
+        return this.funcTable;
     }
 
-    public void setVarArrTable(HashMap<String, VarArrClass> newVarArrTable){
-        this.arrTable = newVarArrTable;
-    }
-
-    public HashMap<String, VarClass> getVarTable(){
-        return this.varTable;
-    }
-
-    public void setVarTable(HashMap<String, VarClass> newVarTable){
-        this.varTable = newVarTable;
+    public void setFuncTable(HashMap<String, FuncClass> newFuncTable){
+        this.funcTable = newFuncTable;
     }
 }

@@ -1,6 +1,5 @@
 import javafx.application.Application;
 import ui.*;
-import controller.*;
 
 public class Main {
 

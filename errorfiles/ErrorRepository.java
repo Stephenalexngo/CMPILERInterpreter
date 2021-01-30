@@ -13,6 +13,7 @@ public class ErrorRepository {
 	private void produceMessages() {
 		this.errorMessage.put("UNDECLARED_VARIABLE", "Variable undeclared '%s' at line %d \n");
         this.errorMessage.put("MULTIPLE_VARIABLE", "Variable already declared '%s' at line %d \n");
+        this.errorMessage.put("MULTIPLE_FUNCTION", "Function already declared '%s' at line %d \n");
         this.errorMessage.put("TYPE_MISMATCH", "Type mismatch '%s' at line %d \n");
     }
     

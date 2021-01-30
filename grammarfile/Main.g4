@@ -69,8 +69,8 @@ function_paremeters_value: LABEL | expression | STRING_TYPE | number | function_
 
 // function declaration
 function_declaration: FUNC (variable_type (OPEN_BRACE CLOSE_BRACE)? | VOID) function_structure;
-function_structure: LABEL OPEN_PAREN function_declaration_parameters? CLOSE_PAREN left_bracket statements+ right_bracket ;
-function_declaration_parameters: variable_type (OPEN_BRACE CLOSE_BRACE)? LABEL (COMMA function_declaration_parameters)?;
+function_structure: LABEL OPEN_PAREN (function_declaration_parameters (COMMA function_declaration_parameters)*)? CLOSE_PAREN left_bracket statements+ right_bracket ;
+function_declaration_parameters: variable_type (OPEN_BRACE CLOSE_BRACE)? LABEL;
 
 // main function 
 main_function : MAIN OPEN_PAREN CLOSE_PAREN left_bracket statements+ right_bracket;

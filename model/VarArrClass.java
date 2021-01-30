@@ -4,17 +4,23 @@ public class VarArrClass {
     private String datatype;
     private String varname;
     private String size;
+    private String parentFunction;
+    private int nodeDepth;
 
-    public VarArrClass(String type, String name){
+    public VarArrClass(String type, String name, String parent, int depth){
         this.datatype = type;
         this.varname = name;
         this.size = "null";
+        this.parentFunction = parent;
+        this.nodeDepth = depth;
     }
 
-    public VarArrClass(String type, String name, String size){
+    public VarArrClass(String type, String name, String size, String parent, int depth){
         this.datatype = type;
         this.varname = name;
         this.size = size;
+        this.parentFunction = parent;
+        this.nodeDepth = depth;
     }
 
     public String getType(){
@@ -27,5 +33,13 @@ public class VarArrClass {
 
     public String getSize(){
         return this.size;
+    }
+
+    public String getParent(){
+        return this.parentFunction;
+    }
+
+    public int getDepth(){
+        return this.nodeDepth;
     }
 }
