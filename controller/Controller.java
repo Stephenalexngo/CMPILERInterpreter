@@ -19,6 +19,7 @@ import com.udojava.evalex.Expression;
 import customfiles.*;
 import commandfiles.*;
 import model.*;
+import ui.gui;
 import grammarfile.*;
 
 public class Controller {
@@ -46,6 +47,7 @@ public class Controller {
         TokenStream tokens = new CommonTokenStream(lexer);
 
         MainParser parser = new MainParser(tokens);
+        customErrorListener.setParser(parser);
         parser.removeErrorListeners();
         parser.addErrorListener(customErrorListener);
 
@@ -55,7 +57,7 @@ public class Controller {
         walker.walk(new MyListener(parser), tree);
 
         if(customErrorListener.getErrorList() == 0){
-            System.out.println("No Syntax Errors"); // should be in GUI
+            gui.console.appendText("No Syntax Errors");
             return true;
         }
 

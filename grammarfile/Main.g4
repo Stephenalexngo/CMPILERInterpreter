@@ -63,8 +63,7 @@ loop_variable_declaration: (variable_type? LABEL (ASSIGN (number | LABEL | expre
 loop_structure: (UP_TO | DOWN_TO) expression left_bracket statements* right_bracket;
 
 // function calling
-function_calling: LABEL OPEN_PAREN function_parameters? CLOSE_PAREN;
-function_parameters: function_paremeters_value (COMMA function_paremeters_value)*; 
+function_calling: LABEL OPEN_PAREN (function_paremeters_value (COMMA function_paremeters_value)*)? CLOSE_PAREN;
 function_paremeters_value: LABEL | expression | STRING_TYPE | number | function_calling;
 
 // function declaration

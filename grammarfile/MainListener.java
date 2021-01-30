@@ -388,16 +388,6 @@ public interface MainListener extends ParseTreeListener {
 	 */
 	void exitFunction_calling(MainParser.Function_callingContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MainParser#function_parameters}.
-	 * @param ctx the parse tree
-	 */
-	void enterFunction_parameters(MainParser.Function_parametersContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MainParser#function_parameters}.
-	 * @param ctx the parse tree
-	 */
-	void exitFunction_parameters(MainParser.Function_parametersContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MainParser#function_paremeters_value}.
 	 * @param ctx the parse tree
 	 */

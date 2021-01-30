@@ -102,18 +102,16 @@ public class gui extends Application {
  
             @Override
             public void handle(ActionEvent event) {
+                console.appendText("\n ======== COMPILED ======== \n");
+
                 try{
                     if(Controller.parse(codeArea.getText())){
-                        Controller.showTree(codeArea.getText());
+                        // Controller.showTree(codeArea.getText());
                         // interpret();
-                    }else{
-                        // send error
                     }
                 }catch(Exception e){
                     e.printStackTrace();
                 }
-                
-                console.appendText("COMPILED \n");
             }
         });
 

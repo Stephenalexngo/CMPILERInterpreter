@@ -472,18 +472,6 @@ public class MainBaseListener implements MainListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunction_parameters(MainParser.Function_parametersContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFunction_parameters(MainParser.Function_parametersContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterFunction_paremeters_value(MainParser.Function_paremeters_valueContext ctx) { }
 	/**
 	 * {@inheritDoc}

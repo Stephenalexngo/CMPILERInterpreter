@@ -1,7 +1,11 @@
 package customfiles;
 
 import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.Recognizer;
+
+import ui.gui;
+
 import org.antlr.v4.runtime.RecognitionException;
 
 import java.util.ArrayList;
@@ -9,6 +13,7 @@ import java.util.ArrayList;
 public class CustomErrorListener extends BaseErrorListener {
 
     private ArrayList<String> error_List = new ArrayList<>();
+    private Parser parser;
 
     public CustomErrorListener() {
 
@@ -35,13 +40,17 @@ public class CustomErrorListener extends BaseErrorListener {
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
             String msg, RecognitionException e) {
         
-        String error_Message = CustomErrorMessage(msg, line, charPositionInLine, offendingSymbol.toString());
+        String error_Message = CustomErrorMessage(msg, line, charPositionInLine, this.parser.getCurrentToken().getText());
             
         error_List.add(error_Message);
 
-        System.out.println(error_Message);
+        gui.console.appendText(error_Message);
     }
     
+    public void setParser(Parser parser){
+        this.parser = parser;
+    }
+
     public int getErrorList(){
         return this.error_List.size();
     }
