@@ -38,6 +38,8 @@ public class Controller {
 
     public static boolean parse() throws Exception {
         // CharStream cStream = CharStreams.fromString(this.input); for GUI
+        SymbolTableManager.initialize();
+
         CharStream cStream = CharStreams.fromFileName("inputtext.txt");
 
         CustomErrorListener customErrorListener = new CustomErrorListener();

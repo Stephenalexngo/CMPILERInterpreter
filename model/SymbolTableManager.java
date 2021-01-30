@@ -12,6 +12,10 @@ public class SymbolTableManager {
         arrTable = new HashMap<String, VarArrClass>();
     }
 
+    public static void initialize(){
+        INSTANCE = new SymbolTableManager();
+    }
+
     public static SymbolTableManager getInstance(){
         if(INSTANCE == null){
             INSTANCE = new SymbolTableManager();
