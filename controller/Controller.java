@@ -23,6 +23,7 @@ import grammarfile.*;
 
 public class Controller {
     public static void showTree() throws Exception {
+        // CharStream cStream = CharStreams.fromString(this.input); for GUI
         CharStream cStream = CharStreams.fromFileName("inputtext.txt");
         Lexer lexer = new MainLexer(cStream);
         TokenStream tokenStream = new CommonTokenStream(lexer);

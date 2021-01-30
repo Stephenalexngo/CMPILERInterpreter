@@ -5,7 +5,7 @@ import controller.*;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        // parse(this.input); for GUI
+        
         if(Controller.parse()){
             // showTree();
         }
