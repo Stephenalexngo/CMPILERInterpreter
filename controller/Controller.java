@@ -36,11 +36,11 @@ public class Controller {
         viewer.open();
     }
 
-    public static boolean parse() throws Exception {
+    public static boolean parse(String input) throws Exception {
         // CharStream cStream = CharStreams.fromString(this.input); for GUI
         SymbolTableManager.initialize();
 
-        CharStream cStream = CharStreams.fromFileName("inputtext.txt");
+        CharStream cStream = CharStreams.fromString(input);
 
         CustomErrorListener customErrorListener = new CustomErrorListener();
         Lexer lexer = new MainLexer(cStream);

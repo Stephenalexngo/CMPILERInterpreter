@@ -97,8 +97,10 @@ public class gui extends Application {
             @Override
             public void handle(ActionEvent event) {
                 try{
-                    if(Controller.parse()){
+                    if(Controller.parse(codeArea.getText())){
                         // interpret();
+                    }else{
+                        // send error
                     }
                 }catch(Exception e){
                     e.printStackTrace();
