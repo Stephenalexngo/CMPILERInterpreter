@@ -15,3 +15,7 @@
 .paragraph-box{
     -fx-background-color: rgb(80, 80, 80);
 }
+
+.var_type{
+    -fx-fill: rgb(152, 165, 224) !important;
+}

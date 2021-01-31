@@ -33,12 +33,16 @@ import controller.*;
 
 public class gui extends Application {
 
-    public static TextArea console = new TextArea();
+    private static TextArea console = new TextArea();
 
     private static final String[] KEYWORDS = new String[] {
         "create", "constant", "return", "print", "scan", "void",
         "func", "main", "if", "else", "else if", "then", "for",
-        "up to", "down to", "while", "int", "bool", "float", "String",
+        "up to", "down to", "while",
+    };
+
+    private static final String[] VAR_TYPE = new String[]{
+        "int", "bool", "float", "String",
     };
 
     //private static final String[] VAR_NAMES;
@@ -50,6 +54,7 @@ public class gui extends Application {
     private static final String SEMICOLON_PATTERN = "\\;";
     private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
     private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
+    private static final String VAR_TYPE_PATTERN = "\\b(" + String.join("|", VAR_TYPE) + ")\\b";
     //private static final String VAR_PATTERN = "\\b(" + String.join("|", VAR_NAMES) + ")\\b";
     
     private static final Pattern PATTERN = Pattern.compile(
@@ -59,26 +64,30 @@ public class gui extends Application {
         "|(?<BRACKET>" + BRACKET_PATTERN + ")" +
         "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")" +
         "|(?<STRING>" + STRING_PATTERN + ")" +
+        "|(?<VARTYPE>" + VAR_TYPE_PATTERN + ")" +
         "|(?<COMMENT>" + COMMENT_PATTERN + ")"
     );
+
+    public static TextArea getTextArea(){
+        return console;
+    }
 
     @Override
     public void start(Stage primaryStage) {
         CodeArea codeArea = new CodeArea();
-
 
         console.setEditable(false);
 
         Button btnCompile = new Button("Compile");        
 
         HBox hbox = new HBox(btnCompile);
-        hbox.setAlignment(Pos.BASELINE_CENTER);
+        hbox.setAlignment(Pos.BASELINE_LEFT);
 
         primaryStage.setTitle("CMPILER");
 
         BorderPane border = new BorderPane();
 
-        
+        btnCompile.setId("compile");
 
         String stylesheet = gui.class.getResource("stylesheet.css").toExternalForm();
         String console_style = gui.class.getResource("console_style.css").toExternalForm();
@@ -122,7 +131,6 @@ public class gui extends Application {
         Scene scene = new Scene(border, 800, 600);
 
         scene.getStylesheets().add(console_style);
-                
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -138,6 +146,7 @@ public class gui extends Application {
                             .group("BRACE") != null ? "brace" : matcher
                             .group("BRACKET") != null ? "bracket" : matcher
                             .group("SEMICOLON") != null ? "semicolon" : matcher
+                            .group("VARTYPE") != null ? "var_type" : matcher
                             .group("STRING") != null ? "string" : null; /* never happens */
             assert styleClass != null;
             spansBuilder.add(Collections.emptyList(), matcher.start()

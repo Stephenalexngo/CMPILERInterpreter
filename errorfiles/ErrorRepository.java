@@ -24,6 +24,6 @@ public class ErrorRepository {
     }
     
     public void reportErrorMessage(String error, String token ,int line){
-        gui.console.appendText(String.format(errorMessage.get(error), token, line));
+        gui.getTextArea().appendText(String.format(errorMessage.get(error), token, line));
     }
 }

@@ -21,6 +21,7 @@ import commandfiles.*;
 import model.*;
 import ui.gui;
 import grammarfile.*;
+import ui.*;
 
 public class Controller {
     public static void showTree(String input) throws Exception {
@@ -57,7 +58,7 @@ public class Controller {
         walker.walk(new MyListener(parser), tree);
 
         if(customErrorListener.getErrorList() == 0){
-            gui.console.appendText("No Syntax Errors");
+            gui.getTextArea().appendText("No Syntax Errors");
             return true;
         }
 

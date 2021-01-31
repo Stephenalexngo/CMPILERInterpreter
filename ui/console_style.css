@@ -8,3 +8,12 @@
 .text-area .content {
     -fx-background-color: #000000;
 }
+
+#compile {
+    -fx-background-color: #354b35;
+    -fx-text-fill: white;
+}
+
+#compile:hover{
+    -fx-background-color: #648a64;
+}

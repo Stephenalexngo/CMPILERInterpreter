@@ -44,7 +44,7 @@ public class CustomErrorListener extends BaseErrorListener {
             
         error_List.add(error_Message);
 
-        gui.console.appendText(error_Message);
+        gui.getTextArea().appendText(error_Message);
     }
     
     public void setParser(Parser parser){
