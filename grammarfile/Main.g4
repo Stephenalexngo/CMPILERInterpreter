@@ -28,7 +28,7 @@ string_declaration: STRING_DEC LABEL (ASSIGN STRING_TYPE)?;
 boolean_declaration: BOOLEAN_DEC LABEL (ASSIGN (comparison_statement | LABEL))?;
 
 // assignment statement
-assignment_statement: LABEL (OPEN_BRACE expression CLOSE_BRACE)? ASSIGN (number | expression | STRING_TYPE | comparison_statement | LABEL (OPEN_BRACE expression CLOSE_BRACE)?);
+assignment_statement: LABEL (OPEN_BRACE expression CLOSE_BRACE)? ASSIGN (LABEL (OPEN_BRACE expression CLOSE_BRACE)? | number | STRING_TYPE | expression | comparison_statement);
 
 // print statement
 print_statement: PRINT OPEN_PAREN extended_value_print (PLUS extended_value_print)* CLOSE_PAREN;

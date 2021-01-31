@@ -1465,13 +1465,13 @@ public class MainParser extends Parser {
 		public NumberContext number() {
 			return getRuleContext(NumberContext.class,0);
 		}
+		public TerminalNode STRING_TYPE() { return getToken(MainParser.STRING_TYPE, 0); }
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
-		public TerminalNode STRING_TYPE() { return getToken(MainParser.STRING_TYPE, 0); }
 		public Comparison_statementContext comparison_statement() {
 			return getRuleContext(Comparison_statementContext.class,0);
 		}
@@ -1528,45 +1528,45 @@ public class MainParser extends Parser {
 			case 1:
 				{
 				setState(248);
-				number();
+				match(LABEL);
+				setState(253);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if (_la==OPEN_BRACE) {
+					{
+					setState(249);
+					match(OPEN_BRACE);
+					setState(250);
+					expression();
+					setState(251);
+					match(CLOSE_BRACE);
+					}
+				}
+
 				}
 				break;
 			case 2:
 				{
-				setState(249);
-				expression();
+				setState(255);
+				number();
 				}
 				break;
 			case 3:
 				{
-				setState(250);
+				setState(256);
 				match(STRING_TYPE);
 				}
 				break;
 			case 4:
 				{
-				setState(251);
-				comparison_statement();
+				setState(257);
+				expression();
 				}
 				break;
 			case 5:
 				{
-				setState(252);
-				match(LABEL);
-				setState(257);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				if (_la==OPEN_BRACE) {
-					{
-					setState(253);
-					match(OPEN_BRACE);
-					setState(254);
-					expression();
-					setState(255);
-					match(CLOSE_BRACE);
-					}
-				}
-
+				setState(258);
+				comparison_statement();
 				}
 				break;
 			}
@@ -3652,7 +3652,7 @@ public class MainParser extends Parser {
 		"\n\20\5\20\u00d9\n\20\3\21\3\21\3\21\3\21\3\21\5\21\u00e0\n\21\5\21\u00e2"+
 		"\n\21\3\22\3\22\3\22\3\22\5\22\u00e8\n\22\3\23\3\23\3\23\3\23\3\23\5\23"+
 		"\u00ef\n\23\5\23\u00f1\n\23\3\24\3\24\3\24\3\24\3\24\5\24\u00f8\n\24\3"+
-		"\24\3\24\3\24\3\24\3\24\3\24\3\24\3\24\3\24\3\24\5\24\u0104\n\24\5\24"+
+		"\24\3\24\3\24\3\24\3\24\3\24\5\24\u0100\n\24\3\24\3\24\3\24\3\24\5\24"+
 		"\u0106\n\24\3\25\3\25\3\25\3\25\3\25\7\25\u010d\n\25\f\25\16\25\u0110"+
 		"\13\25\3\25\3\25\3\26\3\26\3\26\3\26\5\26\u0118\n\26\3\27\3\27\3\27\3"+
 		"\27\3\27\3\27\3\27\3\30\3\30\3\30\3\30\3\30\3\30\5\30\u0127\n\30\3\31"+
@@ -3732,12 +3732,12 @@ public class MainParser extends Parser {
 		"\u00eb\3\2\2\2\u00f0\u00f1\3\2\2\2\u00f1%\3\2\2\2\u00f2\u00f7\7\65\2\2"+
 		"\u00f3\u00f4\7\33\2\2\u00f4\u00f5\5\60\31\2\u00f5\u00f6\7\34\2\2\u00f6"+
 		"\u00f8\3\2\2\2\u00f7\u00f3\3\2\2\2\u00f7\u00f8\3\2\2\2\u00f8\u00f9\3\2"+
-		"\2\2\u00f9\u0105\7)\2\2\u00fa\u0106\5\6\4\2\u00fb\u0106\5\60\31\2\u00fc"+
-		"\u0106\7\62\2\2\u00fd\u0106\58\35\2\u00fe\u0103\7\65\2\2\u00ff\u0100\7"+
-		"\33\2\2\u0100\u0101\5\60\31\2\u0101\u0102\7\34\2\2\u0102\u0104\3\2\2\2"+
-		"\u0103\u00ff\3\2\2\2\u0103\u0104\3\2\2\2\u0104\u0106\3\2\2\2\u0105\u00fa"+
-		"\3\2\2\2\u0105\u00fb\3\2\2\2\u0105\u00fc\3\2\2\2\u0105\u00fd\3\2\2\2\u0105"+
-		"\u00fe\3\2\2\2\u0106\'\3\2\2\2\u0107\u0108\7\6\2\2\u0108\u0109\7\27\2"+
+		"\2\2\u00f9\u0105\7)\2\2\u00fa\u00ff\7\65\2\2\u00fb\u00fc\7\33\2\2\u00fc"+
+		"\u00fd\5\60\31\2\u00fd\u00fe\7\34\2\2\u00fe\u0100\3\2\2\2\u00ff\u00fb"+
+		"\3\2\2\2\u00ff\u0100\3\2\2\2\u0100\u0106\3\2\2\2\u0101\u0106\5\6\4\2\u0102"+
+		"\u0106\7\62\2\2\u0103\u0106\5\60\31\2\u0104\u0106\58\35\2\u0105\u00fa"+
+		"\3\2\2\2\u0105\u0101\3\2\2\2\u0105\u0102\3\2\2\2\u0105\u0103\3\2\2\2\u0105"+
+		"\u0104\3\2\2\2\u0106\'\3\2\2\2\u0107\u0108\7\6\2\2\u0108\u0109\7\27\2"+
 		"\2\u0109\u010e\5*\26\2\u010a\u010b\7!\2\2\u010b\u010d\5*\26\2\u010c\u010a"+
 		"\3\2\2\2\u010d\u0110\3\2\2\2\u010e\u010c\3\2\2\2\u010e\u010f\3\2\2\2\u010f"+
 		"\u0111\3\2\2\2\u0110\u010e\3\2\2\2\u0111\u0112\7\30\2\2\u0112)\3\2\2\2"+
@@ -3825,7 +3825,7 @@ public class MainParser extends Parser {
 		"\u0206\u0204\3\2\2\2\u0206\u0205\3\2\2\2\u0207[\3\2\2\2\u0208\u020b\7"+
 		"\32\2\2\u0209\u020b\b/\1\2\u020a\u0208\3\2\2\2\u020a\u0209\3\2\2\2\u020b"+
 		"]\3\2\2\2Aaot|\u0081\u0085\u008b\u0091\u009b\u00a1\u00ab\u00b1\u00bf\u00c9"+
-		"\u00cf\u00d6\u00d8\u00df\u00e1\u00e7\u00ee\u00f0\u00f7\u0103\u0105\u010e"+
+		"\u00cf\u00d6\u00d8\u00df\u00e1\u00e7\u00ee\u00f0\u00f7\u00ff\u0105\u010e"+
 		"\u0117\u0126\u0133\u0135\u0144\u0146\u0150\u0153\u0156\u015c\u0160\u0164"+
 		"\u0169\u016b\u0171\u0179\u017f\u018b\u0191\u019c\u01a3\u01a5\u01a8\u01b0"+
 		"\u01bc\u01bf\u01c8\u01ce\u01d1\u01dc\u01df\u01e6\u01ed\u01f8\u0200\u0206"+
