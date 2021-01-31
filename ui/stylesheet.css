@@ -8,6 +8,10 @@
     -fx-fill: rgb(255, 255, 255);
 }
 
+ParagraphText{
+    -fx-tab-size: 4;
+}
+
 .styled-text-area {
     -fx-background-color: #323232;
 }

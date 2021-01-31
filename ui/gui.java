@@ -11,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -28,6 +30,9 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
+import org.fxmisc.wellbehaved.event.EventPattern;
+import org.fxmisc.wellbehaved.event.InputMap;
+import org.fxmisc.wellbehaved.event.Nodes;
 
 import controller.*;
 
@@ -106,6 +111,12 @@ public class gui extends Application {
         btnCompile.setPrefSize(80, 30);
 
         codeArea.getStylesheets().add(stylesheet);
+
+        InputMap<KeyEvent> im = InputMap.consume(
+        EventPattern.keyPressed(KeyCode.TAB), 
+            e -> codeArea.replaceSelection("    ")
+        );
+        Nodes.addInputMap(codeArea, im);
 
         btnCompile.setOnAction(new EventHandler<ActionEvent>() {
  
