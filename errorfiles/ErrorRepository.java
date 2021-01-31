@@ -17,6 +17,7 @@ public class ErrorRepository {
         this.errorMessage.put("UNDECLARED_FUNCTION", "Function undeclared '%s' at line %d \n");
         this.errorMessage.put("MULTIPLE_VARIABLE", "Variable already declared '%s' at line %d \n");
         this.errorMessage.put("MULTIPLE_FUNCTION", "Function already declared '%s' at line %d \n");
+        this.errorMessage.put("MULTIPLE_RETURN", "Multiple return for function '%s' at line %d \n");
         this.errorMessage.put("TYPE_MISMATCH", "Type mismatch '%s' at line %d \n");
         this.errorMessage.put("MISSING_RETURN", "Missing return statement for function '%s' at line %d \n");
         this.errorMessage.put("INVALID_VOID_RETURN", "Function '%s' is void, it should not return a value at line %d \n");

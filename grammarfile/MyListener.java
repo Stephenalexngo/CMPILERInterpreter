@@ -608,11 +608,12 @@ public class MyListener extends MainBaseListener {
         currentNode = 0;
         String type = "";
         boolean hasReturn = false;
+        int numReturn = 0;
 
         for(int x=0; x<ctx.function_structure().statements().size(); x++){
             if(ctx.function_structure().statements().get(x).small_statements().return_statement() != null){
                 hasReturn = true;
-                break;
+                numReturn++;
             }
         }
 
@@ -626,7 +627,9 @@ public class MyListener extends MainBaseListener {
             type = ctx.variable_type().getText();
 
             if(!hasReturn)
-                errorRepo.reportErrorMessage("MISSING_RETURN", currentFunction, ctx.getStart().getLine()); 
+                errorRepo.reportErrorMessage("MISSING_RETURN", currentFunction, ctx.getStart().getLine());
+            else if(numReturn > 1)
+                errorRepo.reportErrorMessage("MULTIPLE_RETURN", currentFunction, ctx.getStart().getLine());  
         }
             
 
