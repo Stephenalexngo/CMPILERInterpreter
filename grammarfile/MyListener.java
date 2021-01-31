@@ -34,19 +34,25 @@ public class MyListener extends MainBaseListener {
         for (int x = 0; x < listtoken.size(); x++) {
             if (listtoken.get(x).getType() == 51) {
                 if (varTable.containsKey(listtoken.get(x).getText())) {
-                    if (!varTable.get(listtoken.get(x).getText()).getValue().isEmpty())
-                        expression += varTable.get(listtoken.get(x).getText()).getValue();
-                    else {
-                        errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
-                                listtoken.get(x).getLine());
-                        return "null";
+                    if(varTable.get(listtoken.get(x).getText()).getType().equals("String")){
+                        errorRepo.reportErrorMessage("TYPE_MISMATCH", listtoken.get(x).getText(), listtoken.get(x).getLine());
+                    }
+                    else{
+                        if (!varTable.get(listtoken.get(x).getText()).getValue().isEmpty())
+                            expression += varTable.get(listtoken.get(x).getText()).getValue();
+                        else {
+                            errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
+                                    listtoken.get(x).getLine());
+                            return "null";
+                        }
                     }
                 } else {
                     errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
                             listtoken.get(x).getLine());
                     return "null";
                 }
-            } else {
+            }
+            else {
                 expression += listtoken.get(x).getText();
             }
         }
@@ -65,12 +71,17 @@ public class MyListener extends MainBaseListener {
                     expression += "0";
                 } else {
                     if (varTable.containsKey(listtoken.get(x).getText())) {
-                        if (!varTable.get(listtoken.get(x).getText()).getValue().isEmpty())
-                            expression += varTable.get(listtoken.get(x).getText()).getValue();
-                        else {
-                            errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
-                                    listtoken.get(x).getLine());
-                            return "null";
+                        if(varTable.get(listtoken.get(x).getText()).getType().equals("String")){
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", listtoken.get(x).getText(), listtoken.get(x).getLine());
+                        }
+                        else{
+                            if (!varTable.get(listtoken.get(x).getText()).getValue().isEmpty())
+                                expression += varTable.get(listtoken.get(x).getText()).getValue();
+                            else {
+                                errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
+                                        listtoken.get(x).getLine());
+                                return "null";
+                            }
                         }
                     } else {
                         errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
@@ -602,6 +613,64 @@ public class MyListener extends MainBaseListener {
         }
     }
 
+    @Override public void enterReturn_statement(MainParser.Return_statementContext ctx) {
+        String funcType = funcTable.get(currentFunction).getType();
+        
+        if(!funcType.equals("void")){
+            if(ctx.LABEL() != null){
+                if(funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().getText())){
+                    if(!funcTable.get(currentFunction).getVarTable().get(ctx.LABEL().getText()).getType().equals(funcType)){
+                        errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().getText(), ctx.getStart().getLine());
+                    }
+                }
+                else if(funcTable.get(currentFunction).getVarArrTable().containsKey(ctx.LABEL().getText())){
+                    if(!funcTable.get(currentFunction).getVarArrTable().get(ctx.LABEL().getText()).getType().equals(funcType)){
+                        errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().getText(), ctx.getStart().getLine());
+                    }
+                }
+                else if(!funcTable.get(currentFunction).getParams().isEmpty()){
+                    if(!funcTable.get(currentFunction).getParams().get(ctx.LABEL().getText()).getType().equals(funcType)){
+                        errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().getText(), ctx.getStart().getLine());
+                    }
+                }
+                else{
+                    errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", ctx.LABEL().getText(), ctx.getStart().getLine());
+                }
+            }
+            else if(funcType.equals("String")){
+                if(ctx.STRING_TYPE() == null){
+                    errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.getChild(1).getText(), ctx.getStart().getLine());
+                }
+            }
+            else if(funcType.equals("int")){
+                if(ctx.expression() == null && ctx.number() == null){
+                    errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.getChild(1).getText(), ctx.getStart().getLine());
+                }
+                else if(ctx.expression() != null){
+                    Token first = ctx.expression().start;
+                    Token last = ctx.expression().stop;
+                    String expr = convertExpression(tokens.getTokens(first.getTokenIndex(), last.getTokenIndex()),
+                            funcTable.get(currentFunction).getVarTable());
+    
+                    if(!expr.equals("null")){
+                        if (expr.contains("."))
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.expression().getText(), ctx.getStart().getLine());
+                    }
+                }
+                else if(ctx.number() != null){
+                    if(ctx.number().FLOAT_NUMBER() != null){
+                        errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.number().FLOAT_NUMBER().getText(), ctx.getStart().getLine());
+                    }
+                }
+            }
+            else if(funcType.equals("float")){
+                if(ctx.expression() == null && ctx.number() == null){
+                    errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.getChild(1).getText(), ctx.getStart().getLine());
+                }
+            }
+        }
+    }
+
     @Override
     public void enterFunction_declaration(MainParser.Function_declarationContext ctx) {
         currentFunction = ctx.function_structure().LABEL().getText();
@@ -659,10 +728,10 @@ public class MyListener extends MainBaseListener {
                 }
             }
 
-            funcTable.put(currentFunction, new FuncClass(currentFunction, type, parameters));
+            funcTable.put(currentFunction, new FuncClass(type, currentFunction, parameters));
         }
         else{
-            funcTable.put(currentFunction, new FuncClass(currentFunction, type, null));
+            funcTable.put(currentFunction, new FuncClass(type ,currentFunction, null));
         }
     }
 
@@ -670,6 +739,6 @@ public class MyListener extends MainBaseListener {
         currentFunction = ctx.MAIN().getText();
         currentNode = 0;
 
-        funcTable.put(currentFunction, new FuncClass(currentFunction, "void", null));
+        funcTable.put(currentFunction, new FuncClass("void", currentFunction, null));
     }
 }
