@@ -5,6 +5,10 @@ public class ParamClass {
     private String varname;
     private boolean isArray;
 
+    public ParamClass(){
+        
+    }
+
     public ParamClass(String type, String name, boolean isarraay){
         this.datatype = type;
         this.varname = name;

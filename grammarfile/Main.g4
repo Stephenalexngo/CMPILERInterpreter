@@ -64,7 +64,7 @@ loop_structure: (UP_TO | DOWN_TO) expression left_bracket statements* right_brac
 
 // function calling
 function_calling: LABEL OPEN_PAREN (function_paremeters_value (COMMA function_paremeters_value)*)? CLOSE_PAREN;
-function_paremeters_value: LABEL | expression | STRING_TYPE | number | function_calling;
+function_paremeters_value: LABEL | number | STRING_TYPE | expression | function_calling;
 
 // function declaration
 function_declaration: FUNC (variable_type (OPEN_BRACE CLOSE_BRACE)? | VOID) function_structure;

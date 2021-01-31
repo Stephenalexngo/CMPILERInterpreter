@@ -3042,12 +3042,12 @@ public class MainParser extends Parser {
 
 	public static class Function_paremeters_valueContext extends ParserRuleContext {
 		public TerminalNode LABEL() { return getToken(MainParser.LABEL, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public TerminalNode STRING_TYPE() { return getToken(MainParser.STRING_TYPE, 0); }
 		public NumberContext number() {
 			return getRuleContext(NumberContext.class,0);
+		}
+		public TerminalNode STRING_TYPE() { return getToken(MainParser.STRING_TYPE, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public Function_callingContext function_calling() {
 			return getRuleContext(Function_callingContext.class,0);
@@ -3084,7 +3084,7 @@ public class MainParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(450);
-				expression();
+				number();
 				}
 				break;
 			case 3:
@@ -3098,7 +3098,7 @@ public class MainParser extends Parser {
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(452);
-				number();
+				expression();
 				}
 				break;
 			case 5:
@@ -3800,8 +3800,8 @@ public class MainParser extends Parser {
 		"\u01bb\5N(\2\u01ba\u01b8\3\2\2\2\u01bb\u01be\3\2\2\2\u01bc\u01ba\3\2\2"+
 		"\2\u01bc\u01bd\3\2\2\2\u01bd\u01c0\3\2\2\2\u01be\u01bc\3\2\2\2\u01bf\u01b7"+
 		"\3\2\2\2\u01bf\u01c0\3\2\2\2\u01c0\u01c1\3\2\2\2\u01c1\u01c2\7\30\2\2"+
-		"\u01c2M\3\2\2\2\u01c3\u01c9\7\65\2\2\u01c4\u01c9\5\60\31\2\u01c5\u01c9"+
-		"\7\62\2\2\u01c6\u01c9\5\6\4\2\u01c7\u01c9\5L\'\2\u01c8\u01c3\3\2\2\2\u01c8"+
+		"\u01c2M\3\2\2\2\u01c3\u01c9\7\65\2\2\u01c4\u01c9\5\6\4\2\u01c5\u01c9\7"+
+		"\62\2\2\u01c6\u01c9\5\60\31\2\u01c7\u01c9\5L\'\2\u01c8\u01c3\3\2\2\2\u01c8"+
 		"\u01c4\3\2\2\2\u01c8\u01c5\3\2\2\2\u01c8\u01c6\3\2\2\2\u01c8\u01c7\3\2"+
 		"\2\2\u01c9O\3\2\2\2\u01ca\u01d1\7\t\2\2\u01cb\u01ce\5\4\3\2\u01cc\u01cd"+
 		"\7\33\2\2\u01cd\u01cf\7\34\2\2\u01ce\u01cc\3\2\2\2\u01ce\u01cf\3\2\2\2"+

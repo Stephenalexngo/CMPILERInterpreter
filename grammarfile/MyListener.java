@@ -10,6 +10,7 @@ import model.*;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.Map.Entry;
 
 import com.udojava.evalex.Expression;
 
@@ -423,47 +424,64 @@ public class MyListener extends MainBaseListener {
         }
     }
 
-    @Override public void enterFunction_calling(MainParser.Function_callingContext ctx) { 
-        if(!funcTable.containsKey(ctx.LABEL().getText())){
+    @Override
+    public void enterFunction_calling(MainParser.Function_callingContext ctx) {
+        if (!funcTable.containsKey(ctx.LABEL().getText())) {
             errorRepo.reportErrorMessage("UNDECLARED_FUNCTION", ctx.LABEL().getText(), ctx.getStart().getLine());
-        }
-        else{
+        } else {
             int funcCallingSize = ctx.function_paremeters_value().size();
 
-            if(funcCallingSize != funcTable.get(ctx.LABEL().getText()).getParams().size()){
-                errorRepo.reportErrorMessage("PARAMETER_COUNT_MISMATCH", ctx.LABEL().getText(), ctx.getStart().getLine());
-            }
-            else{
-                
+            if (funcCallingSize != funcTable.get(ctx.LABEL().getText()).getParams().size()) {
+                errorRepo.reportErrorMessage("PARAMETER_COUNT_MISMATCH", ctx.LABEL().getText(),
+                        ctx.getStart().getLine());
+            } else {
+                Iterator<Entry<String, ParamClass>> iterParam = funcTable.get(ctx.LABEL().getText()).getParams().entrySet().iterator();
+
                 for(int x=0; x<funcCallingSize; x++){
                     Function_paremeters_valueContext funcCallParam = ctx.function_paremeters_value().get(x);
-                    ParamClass currParam = funcTable.get(ctx.LABEL().getText()).getParams().values().iterator().next();
+                    ParamClass currParam = new ParamClass();
 
-                    if(funcCallParam.STRING_TYPE() != null){
-                        if(!currParam.getType().equals("String") && !currParam.isArray()){
-                            errorRepo.reportErrorMessage("TYPE_MISMATCH", funcCallParam.LABEL().getText(), ctx.getStart().getLine());
-                        }
-                    }
-                    else if(funcCallParam.number() != null){
-                        if(funcCallParam.number().INT_NUMBER() != null){
-                            if(currParam.getType().equals("float") && !currParam.isArray()){
-                                errorRepo.reportErrorMessage("TYPE_MISMATCH", funcCallParam.LABEL().getText(), ctx.getStart().getLine());
-                            }
-                        }
-                    }
-                    else if(funcCallParam.LABEL() != null){
+                    if(iterParam.hasNext())
+                        currParam = iterParam.next().getValue();
+
+                    if(funcCallParam.LABEL() != null){
                         if(funcTable.get(currentFunction).getVarTable().containsKey(funcCallParam.LABEL().getText())){
                             if(currParam.isArray() || !currParam.getType().equals(funcTable.get(currentFunction).getVarTable().get(funcCallParam.LABEL().getText()).getType())){
                                 errorRepo.reportErrorMessage("TYPE_MISMATCH", funcCallParam.LABEL().getText(), ctx.getStart().getLine());
                             }
                         }
                         else if(funcTable.get(currentFunction).getVarArrTable().containsKey(funcCallParam.LABEL().getText())){
-                            if(!currParam.isArray() || !currParam.getType().equals(funcTable.get(currentFunction).getVarTable().get(funcCallParam.LABEL().getText()).getType())){
+                            if(!currParam.isArray() || !currParam.getType().equals(funcTable.get(currentFunction).getVarArrTable().get(funcCallParam.LABEL().getText()).getType())){
                                 errorRepo.reportErrorMessage("TYPE_MISMATCH", funcCallParam.LABEL().getText(), ctx.getStart().getLine());
                             }
                         }
                         else{
                             errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", funcCallParam.LABEL().getText(), ctx.getStart().getLine());
+                        }
+                    }
+                    else if(currParam.getType().equals("String") && !currParam.isArray()){
+                        if(funcCallParam.STRING_TYPE() == null){
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", funcCallParam.getChild(0).getText(), ctx.getStart().getLine());
+                        }
+                    }
+                    else if(currParam.getType().equals("int") && !currParam.isArray()){
+                        if(funcCallParam.expression() == null && funcCallParam.number() == null){
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", funcCallParam.getChild(0).getText(), ctx.getStart().getLine());
+                        }
+                        else if(funcCallParam.expression() != null){
+                            Token first = funcCallParam.expression().start;
+                            Token last = funcCallParam.expression().stop;
+                            String expr = convertExpression(tokens.getTokens(first.getTokenIndex(), last.getTokenIndex()),
+                                    funcTable.get(currentFunction).getVarTable());
+
+                            if(!expr.equals("null")){
+                                if (expr.contains(".") && currParam.getType().equals("int")) 
+                                    errorRepo.reportErrorMessage("TYPE_MISMATCH", funcCallParam.expression().getText(), ctx.getStart().getLine());
+                            }
+                        }
+                        else if(funcCallParam.number() != null){
+                            if(funcCallParam.number().FLOAT_NUMBER() != null)
+                                errorRepo.reportErrorMessage("TYPE_MISMATCH", funcCallParam.getChild(0).getText(), ctx.getStart().getLine());
                         }
                     }
                     else if(funcCallParam.expression() != null){
@@ -474,7 +492,7 @@ public class MyListener extends MainBaseListener {
 
                         if(!expr.equals("null")){
                             if (expr.contains(".") && currParam.getType().equals("int")) 
-                                errorRepo.reportErrorMessage("TYPE_MISMATCH", funcCallParam.LABEL().getText(), ctx.getStart().getLine());
+                                errorRepo.reportErrorMessage("TYPE_MISMATCH", funcCallParam.expression().getText(), ctx.getStart().getLine());
                         }
                     }
                 }
