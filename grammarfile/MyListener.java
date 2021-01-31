@@ -102,24 +102,36 @@ public class MyListener extends MainBaseListener {
         }
 
         if (!funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().getText())
-                && !funcTable.get(currentFunction).getVarArrTable().containsKey(ctx.LABEL().getText())) {
-            if (!expr.equals("null")) {
-                String type = ctx.INT_DEC().getText();
-                String varname = ctx.LABEL().getText();
+                && !funcTable.get(currentFunction).getVarArrTable().containsKey(ctx.LABEL().getText())){
+            
+            boolean isSame = false;
 
-                if (!expr.equals("")) {
-                    if (!expr.contains(".")) {
-                        EvalEx = new Expression(expr);
-                        BigDecimal result = EvalEx.eval();
-                        String value = result.intValue() + "";
+            if(funcTable.get(currentFunction).getParams() != null){
+                if(funcTable.get(currentFunction).getParams().containsKey(ctx.LABEL().getText())){
+                    errorRepo.reportErrorMessage("MULTIPLE_VARIABLE", ctx.LABEL().getText(), ctx.getStart().getLine());
+                    isSame = true;
+                }
+            }
 
+            if(!isSame){
+                if (!expr.equals("null")) {
+                    String type = ctx.INT_DEC().getText();
+                    String varname = ctx.LABEL().getText();
+    
+                    if (!expr.equals("")) {
+                        if (!expr.contains(".")) {
+                            EvalEx = new Expression(expr);
+                            BigDecimal result = EvalEx.eval();
+                            String value = result.intValue() + "";
+    
+                            funcTable.get(currentFunction).getVarTable().put(varname,
+                                    new VarClass(type, varname, value, currentFunction, currentNode));
+                        } else
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().getText(), ctx.getStart().getLine());
+                    } else {
                         funcTable.get(currentFunction).getVarTable().put(varname,
-                                new VarClass(type, varname, value, currentFunction, currentNode));
-                    } else
-                        errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().getText(), ctx.getStart().getLine());
-                } else {
-                    funcTable.get(currentFunction).getVarTable().put(varname,
-                            new VarClass(type, varname, currentFunction, currentNode));
+                                new VarClass(type, varname, currentFunction, currentNode));
+                    }
                 }
             }
         } else {
@@ -144,21 +156,33 @@ public class MyListener extends MainBaseListener {
 
         if (!funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().getText())
                 && !funcTable.get(currentFunction).getVarArrTable().containsKey(ctx.LABEL().getText())) {
-            if (!expr.equals("null")) {
-                String type = ctx.FLOAT_DEC().getText();
-                String varname = ctx.LABEL().getText();
 
-                if (!expr.equals("")) {
-                    EvalEx = new Expression(expr);
-                    BigDecimal result = EvalEx.eval();
+            boolean isSame = false;
 
-                    String value = result.intValue() + "";
+            if(funcTable.get(currentFunction).getParams() != null){
+                if(funcTable.get(currentFunction).getParams().containsKey(ctx.LABEL().getText())){
+                    errorRepo.reportErrorMessage("MULTIPLE_VARIABLE", ctx.LABEL().getText(), ctx.getStart().getLine());
+                    isSame = true;
+                }
+            }
 
-                    funcTable.get(currentFunction).getVarTable().put(varname,
-                            new VarClass(type, varname, value, currentFunction, currentNode));
-                } else {
-                    funcTable.get(currentFunction).getVarTable().put(varname,
-                            new VarClass(type, varname, currentFunction, currentNode));
+            if(!isSame){
+                if (!expr.equals("null")) {
+                    String type = ctx.FLOAT_DEC().getText();
+                    String varname = ctx.LABEL().getText();
+    
+                    if (!expr.equals("")) {
+                        EvalEx = new Expression(expr);
+                        BigDecimal result = EvalEx.eval();
+    
+                        String value = result.intValue() + "";
+    
+                        funcTable.get(currentFunction).getVarTable().put(varname,
+                                new VarClass(type, varname, value, currentFunction, currentNode));
+                    } else {
+                        funcTable.get(currentFunction).getVarTable().put(varname,
+                                new VarClass(type, varname, currentFunction, currentNode));
+                    }
                 }
             }
         } else {
@@ -178,16 +202,28 @@ public class MyListener extends MainBaseListener {
 
         if (!funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().getText())
                 && !funcTable.get(currentFunction).getVarArrTable().containsKey(ctx.LABEL().getText())) {
-            String type = ctx.STRING_DEC().getText();
-            String varname = ctx.LABEL().getText();
 
-            if (!expr.equals("")) {
-                expr = expr.replace("\"", "");
-                funcTable.get(currentFunction).getVarTable().put(varname,
-                        new VarClass(type, varname, expr, currentFunction, currentNode));
-            } else {
-                funcTable.get(currentFunction).getVarTable().put(varname,
-                        new VarClass(type, varname, currentFunction, currentNode));
+            boolean isSame = false;
+
+            if(funcTable.get(currentFunction).getParams() != null){
+                if(funcTable.get(currentFunction).getParams().containsKey(ctx.LABEL().getText())){
+                    errorRepo.reportErrorMessage("MULTIPLE_VARIABLE", ctx.LABEL().getText(), ctx.getStart().getLine());
+                    isSame = true;
+                }
+            }
+
+            if(!isSame){
+                String type = ctx.STRING_DEC().getText();
+                String varname = ctx.LABEL().getText();
+
+                if (!expr.equals("")) {
+                    expr = expr.replace("\"", "");
+                    funcTable.get(currentFunction).getVarTable().put(varname,
+                            new VarClass(type, varname, expr, currentFunction, currentNode));
+                } else {
+                    funcTable.get(currentFunction).getVarTable().put(varname,
+                            new VarClass(type, varname, currentFunction, currentNode));
+                }
             }
         } else {
             errorRepo.reportErrorMessage("MULTIPLE_VARIABLE", ctx.LABEL().getText(), ctx.getStart().getLine());
@@ -209,21 +245,33 @@ public class MyListener extends MainBaseListener {
 
         if (!funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().get(0).getText())
                 && !funcTable.get(currentFunction).getVarArrTable().containsKey(ctx.LABEL().get(0).getText())) {
-            if (!expr.equals("null")) {
-                String type = ctx.BOOLEAN_DEC().getText();
-                String varname = ctx.LABEL().get(0).getText();
 
-                if (!expr.equals("")) {
-                    EvalEx = new Expression(expr);
-                    BigDecimal result = EvalEx.eval();
+            boolean isSame = false;
 
-                    String value = result.intValue() + "";
+            if(funcTable.get(currentFunction).getParams() != null){
+                if(funcTable.get(currentFunction).getParams().containsKey(ctx.LABEL().get(0).getText())){
+                    errorRepo.reportErrorMessage("MULTIPLE_VARIABLE", ctx.LABEL().get(0).getText(), ctx.getStart().getLine());
+                    isSame = true;
+                }
+            }
 
-                    funcTable.get(currentFunction).getVarTable().put(varname,
-                            new VarClass(type, varname, value, currentFunction, currentNode));
-                } else {
-                    funcTable.get(currentFunction).getVarTable().put(varname,
-                            new VarClass(type, varname, currentFunction, currentNode));
+            if(!isSame){
+                if (!expr.equals("null")) {
+                    String type = ctx.BOOLEAN_DEC().getText();
+                    String varname = ctx.LABEL().get(0).getText();
+    
+                    if (!expr.equals("")) {
+                        EvalEx = new Expression(expr);
+                        BigDecimal result = EvalEx.eval();
+    
+                        String value = result.intValue() + "";
+    
+                        funcTable.get(currentFunction).getVarTable().put(varname,
+                                new VarClass(type, varname, value, currentFunction, currentNode));
+                    } else {
+                        funcTable.get(currentFunction).getVarTable().put(varname,
+                                new VarClass(type, varname, currentFunction, currentNode));
+                    }
                 }
             }
         } else {
@@ -246,24 +294,36 @@ public class MyListener extends MainBaseListener {
 
         if (!funcTable.get(currentFunction).getVarArrTable().containsKey(ctx.LABEL().get(0).getText())
                 && !funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().get(0).getText())) {
-            if (!size.equals("null")) {
-                String type = ctx.INT_DEC().get(0).getText();
-                String varname = ctx.LABEL().get(0).getText();
 
-                if (!size.equals("")) {
-                    if (!size.contains(".")) {
-                        EvalEx = new Expression(size);
-                        BigDecimal result = EvalEx.eval();
-                        String value = result.intValue() + "";
+            boolean isSame = false;
 
+            if(funcTable.get(currentFunction).getParams() != null){
+                if(funcTable.get(currentFunction).getParams().containsKey(ctx.LABEL().get(0).getText())){
+                    errorRepo.reportErrorMessage("MULTIPLE_VARIABLE", ctx.LABEL().get(0).getText(), ctx.getStart().getLine());
+                    isSame = true;
+                }
+            }
+
+            if(!isSame){
+                if (!size.equals("null")) {
+                    String type = ctx.INT_DEC().get(0).getText();
+                    String varname = ctx.LABEL().get(0).getText();
+    
+                    if (!size.equals("")) {
+                        if (!size.contains(".")) {
+                            EvalEx = new Expression(size);
+                            BigDecimal result = EvalEx.eval();
+                            String value = result.intValue() + "";
+    
+                            funcTable.get(currentFunction).getVarArrTable().put(varname,
+                                    new VarArrClass(type, varname, value, currentFunction, currentNode));
+                        } else
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).getText(),
+                                    ctx.getStart().getLine());
+                    } else {
                         funcTable.get(currentFunction).getVarArrTable().put(varname,
-                                new VarArrClass(type, varname, value, currentFunction, currentNode));
-                    } else
-                        errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).getText(),
-                                ctx.getStart().getLine());
-                } else {
-                    funcTable.get(currentFunction).getVarArrTable().put(varname,
-                            new VarArrClass(type, varname, currentFunction, currentNode));
+                                new VarArrClass(type, varname, currentFunction, currentNode));
+                    }
                 }
             }
         } else {
@@ -286,23 +346,35 @@ public class MyListener extends MainBaseListener {
 
         if (!funcTable.get(currentFunction).getVarArrTable().containsKey(ctx.LABEL().getText())
                 && !funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().getText())) {
-            if (!size.equals("null")) {
-                String type = ctx.STRING_DEC().get(0).getText();
-                String varname = ctx.LABEL().getText();
 
-                if (!size.equals("")) {
-                    if (!size.contains(".")) {
-                        EvalEx = new Expression(size);
-                        BigDecimal result = EvalEx.eval();
-                        String value = result.intValue() + "";
+            boolean isSame = false;
 
+            if(funcTable.get(currentFunction).getParams() != null){
+                if(funcTable.get(currentFunction).getParams().containsKey(ctx.LABEL().getText())){
+                    errorRepo.reportErrorMessage("MULTIPLE_VARIABLE", ctx.LABEL().getText(), ctx.getStart().getLine());
+                    isSame = true;
+                }
+            }
+            
+            if(!isSame){
+                if (!size.equals("null")) {
+                    String type = ctx.STRING_DEC().get(0).getText();
+                    String varname = ctx.LABEL().getText();
+    
+                    if (!size.equals("")) {
+                        if (!size.contains(".")) {
+                            EvalEx = new Expression(size);
+                            BigDecimal result = EvalEx.eval();
+                            String value = result.intValue() + "";
+    
+                            funcTable.get(currentFunction).getVarArrTable().put(varname,
+                                    new VarArrClass(type, varname, value, currentFunction, currentNode));
+                        } else
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().getText(), ctx.getStart().getLine());
+                    } else {
                         funcTable.get(currentFunction).getVarArrTable().put(varname,
-                                new VarArrClass(type, varname, value, currentFunction, currentNode));
-                    } else
-                        errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().getText(), ctx.getStart().getLine());
-                } else {
-                    funcTable.get(currentFunction).getVarArrTable().put(varname,
-                            new VarArrClass(type, varname, currentFunction, currentNode));
+                                new VarArrClass(type, varname, currentFunction, currentNode));
+                    }
                 }
             }
         } else {
@@ -325,24 +397,36 @@ public class MyListener extends MainBaseListener {
 
         if (!funcTable.get(currentFunction).getVarArrTable().containsKey(ctx.LABEL().get(0).getText())
                 && !funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().get(0).getText())) {
-            if (!size.equals("null")) {
-                String type = ctx.BOOLEAN_DEC().get(0).getText();
-                String varname = ctx.LABEL().get(0).getText();
 
-                if (!size.equals("")) {
-                    if (!size.contains(".")) {
-                        EvalEx = new Expression(size);
-                        BigDecimal result = EvalEx.eval();
-                        String value = result.intValue() + "";
+            boolean isSame = false;
 
+            if(funcTable.get(currentFunction).getParams() != null){
+                if(funcTable.get(currentFunction).getParams().containsKey(ctx.LABEL().get(0).getText())){
+                    errorRepo.reportErrorMessage("MULTIPLE_VARIABLE", ctx.LABEL().get(0).getText(), ctx.getStart().getLine());
+                    isSame = true;
+                }
+            }
+
+            if(!isSame){
+                if (!size.equals("null")) {
+                    String type = ctx.BOOLEAN_DEC().get(0).getText();
+                    String varname = ctx.LABEL().get(0).getText();
+    
+                    if (!size.equals("")) {
+                        if (!size.contains(".")) {
+                            EvalEx = new Expression(size);
+                            BigDecimal result = EvalEx.eval();
+                            String value = result.intValue() + "";
+    
+                            funcTable.get(currentFunction).getVarArrTable().put(varname,
+                                    new VarArrClass(type, varname, value, currentFunction, currentNode));
+                        } else
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).getText(),
+                                    ctx.getStart().getLine());
+                    } else {
                         funcTable.get(currentFunction).getVarArrTable().put(varname,
-                                new VarArrClass(type, varname, value, currentFunction, currentNode));
-                    } else
-                        errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).getText(),
-                                ctx.getStart().getLine());
-                } else {
-                    funcTable.get(currentFunction).getVarArrTable().put(varname,
-                            new VarArrClass(type, varname, currentFunction, currentNode));
+                                new VarArrClass(type, varname, currentFunction, currentNode));
+                    }
                 }
             }
         } else {
@@ -365,24 +449,36 @@ public class MyListener extends MainBaseListener {
 
         if (!funcTable.get(currentFunction).getVarArrTable().containsKey(ctx.LABEL().get(0).getText())
                 && !funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().get(0).getText())) {
-            if (!size.equals("null")) {
-                String type = ctx.FLOAT_DEC().get(0).getText();
-                String varname = ctx.LABEL().get(0).getText();
 
-                if (!size.equals("")) {
-                    if (!size.contains(".")) {
-                        EvalEx = new Expression(size);
-                        BigDecimal result = EvalEx.eval();
-                        String value = result.intValue() + "";
+            boolean isSame = false;
 
+            if(funcTable.get(currentFunction).getParams() != null){
+                if(funcTable.get(currentFunction).getParams().containsKey(ctx.LABEL().get(0).getText())){
+                    errorRepo.reportErrorMessage("MULTIPLE_VARIABLE", ctx.LABEL().get(0).getText(), ctx.getStart().getLine());
+                    isSame = true;
+                }
+            }
+
+            if(!isSame){
+                if (!size.equals("null")) {
+                    String type = ctx.FLOAT_DEC().get(0).getText();
+                    String varname = ctx.LABEL().get(0).getText();
+    
+                    if (!size.equals("")) {
+                        if (!size.contains(".")) {
+                            EvalEx = new Expression(size);
+                            BigDecimal result = EvalEx.eval();
+                            String value = result.intValue() + "";
+    
+                            funcTable.get(currentFunction).getVarArrTable().put(varname,
+                                    new VarArrClass(type, varname, value, currentFunction, currentNode));
+                        } else
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).getText(),
+                                    ctx.getStart().getLine());
+                    } else {
                         funcTable.get(currentFunction).getVarArrTable().put(varname,
-                                new VarArrClass(type, varname, value, currentFunction, currentNode));
-                    } else
-                        errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).getText(),
-                                ctx.getStart().getLine());
-                } else {
-                    funcTable.get(currentFunction).getVarArrTable().put(varname,
-                            new VarArrClass(type, varname, currentFunction, currentNode));
+                                new VarArrClass(type, varname, currentFunction, currentNode));
+                    }
                 }
             }
         } else {
@@ -436,6 +532,7 @@ public class MyListener extends MainBaseListener {
                         ctx.getStart().getLine());
             } else {
                 Iterator<Entry<String, ParamClass>> iterParam = funcTable.get(ctx.LABEL().getText()).getParams().entrySet().iterator();
+                HashMap<String, String> temphash = new HashMap<String, String>();
 
                 for(int x=0; x<funcCallingSize; x++){
                     Function_paremeters_valueContext funcCallParam = ctx.function_paremeters_value().get(x);
@@ -445,15 +542,20 @@ public class MyListener extends MainBaseListener {
                         currParam = iterParam.next().getValue();
 
                     if(funcCallParam.LABEL() != null){
-                        if(funcTable.get(currentFunction).getVarTable().containsKey(funcCallParam.LABEL().getText())){
+                        if(temphash.containsKey(funcCallParam.LABEL().getText())){
+                            errorRepo.reportErrorMessage("MULTIPLE_VARIABLE", funcCallParam.LABEL().getText(), ctx.getStart().getLine());
+                        }
+                        else if(funcTable.get(currentFunction).getVarTable().containsKey(funcCallParam.LABEL().getText())){
                             if(currParam.isArray() || !currParam.getType().equals(funcTable.get(currentFunction).getVarTable().get(funcCallParam.LABEL().getText()).getType())){
                                 errorRepo.reportErrorMessage("TYPE_MISMATCH", funcCallParam.LABEL().getText(), ctx.getStart().getLine());
                             }
+                            temphash.put(funcCallParam.LABEL().getText(), funcCallParam.LABEL().getText());
                         }
                         else if(funcTable.get(currentFunction).getVarArrTable().containsKey(funcCallParam.LABEL().getText())){
                             if(!currParam.isArray() || !currParam.getType().equals(funcTable.get(currentFunction).getVarArrTable().get(funcCallParam.LABEL().getText()).getType())){
                                 errorRepo.reportErrorMessage("TYPE_MISMATCH", funcCallParam.LABEL().getText(), ctx.getStart().getLine());
                             }
+                            temphash.put(funcCallParam.LABEL().getText(), funcCallParam.LABEL().getText());
                         }
                         else{
                             errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", funcCallParam.LABEL().getText(), ctx.getStart().getLine());
