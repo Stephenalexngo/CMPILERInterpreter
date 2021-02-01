@@ -16,19 +16,19 @@ small_statements: (print_statement | scan_statement | return_statement | any_dec
 
 // Declarations
 any_declaration: CONSTANT? (var_declaration | arr_declaration); 
-var_declaration: float_declaration| int_declaration | string_declaration | boolean_declaration;
+var_declaration: float_declaration | int_declaration | string_declaration | boolean_declaration;
 arr_declaration: float_arr_declaration | int_arr_declaration | string_arr_declaration | boolean_arr_declaration;
 float_arr_declaration: FLOAT_DEC OPEN_BRACE CLOSE_BRACE LABEL (ASSIGN (CREATE FLOAT_DEC | LABEL) OPEN_BRACE expression CLOSE_BRACE)?;
 int_arr_declaration: INT_DEC OPEN_BRACE CLOSE_BRACE LABEL (ASSIGN (CREATE INT_DEC | LABEL) OPEN_BRACE expression CLOSE_BRACE)?;
 string_arr_declaration: STRING_DEC OPEN_BRACE CLOSE_BRACE LABEL (ASSIGN (CREATE STRING_DEC) OPEN_BRACE expression CLOSE_BRACE)?;
 boolean_arr_declaration: BOOLEAN_DEC OPEN_BRACE CLOSE_BRACE LABEL (ASSIGN (CREATE BOOLEAN_DEC | LABEL) OPEN_BRACE expression CLOSE_BRACE)?;
-float_declaration: FLOAT_DEC LABEL (ASSIGN (FLOAT_NUMBER | expression))?;
-int_declaration: INT_DEC LABEL (ASSIGN (INT_NUMBER | expression))?;
-string_declaration: STRING_DEC LABEL (ASSIGN STRING_TYPE)?;
-boolean_declaration: BOOLEAN_DEC LABEL (ASSIGN (comparison_statement | LABEL))?;
+float_declaration: FLOAT_DEC LABEL (ASSIGN (FLOAT_NUMBER | function_calling | expression))?;
+int_declaration: INT_DEC LABEL (ASSIGN (INT_NUMBER | function_calling | expression))?;
+string_declaration: STRING_DEC LABEL (ASSIGN STRING_TYPE | function_calling)?;
+boolean_declaration: BOOLEAN_DEC LABEL (ASSIGN (LABEL | comparison_statement | function_calling))?;
 
 // assignment statement
-assignment_statement: LABEL (OPEN_BRACE expression CLOSE_BRACE)? ASSIGN (LABEL (OPEN_BRACE expression CLOSE_BRACE)? | number | STRING_TYPE | expression | comparison_statement);
+assignment_statement: LABEL (OPEN_BRACE expression CLOSE_BRACE)? ASSIGN (LABEL (OPEN_BRACE expression CLOSE_BRACE)? | number | STRING_TYPE | expression | comparison_statement | function_calling);
 
 // print statement
 print_statement: PRINT OPEN_PAREN extended_value_print (PLUS extended_value_print)* CLOSE_PAREN;
@@ -38,7 +38,7 @@ extended_value_print: STRING_TYPE | LABEL | expression | function_calling;
 scan_statement: SCAN OPEN_PAREN STRING_TYPE COMMA LABEL CLOSE_PAREN;
 
 // return statement
-return_statement: RETURN (STRING_TYPE | number | LABEL | expression | function_calling);
+return_statement: RETURN (STRING_TYPE | number | LABEL | expression | comparison_statement | function_calling);
 
 // arithmetic statement
 expression: second_operator_expression;

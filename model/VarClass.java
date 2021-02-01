@@ -6,6 +6,7 @@ public class VarClass {
     private String value;
     private String parentFunction;
     private int nodeDepth;
+    private boolean isConstant;
 
     public VarClass(String type, String name, String parent, int depth){
         this.datatype = type;
@@ -13,14 +14,16 @@ public class VarClass {
         this.value = "null";
         this.parentFunction = parent;
         this.nodeDepth = depth;
+        this.isConstant = false;
     }
 
-    public VarClass(String type, String name, String value, String parent, int depth){
+    public VarClass(String type, String name, String value, String parent, int depth, boolean isConstant){
         this.datatype = type;
         this.varname = name;
         this.value = value;
         this.parentFunction = parent;
         this.nodeDepth = depth;
+        this.isConstant = isConstant;
     }
 
     public String getType(){
@@ -41,5 +44,9 @@ public class VarClass {
 
     public int getDepth(){
         return this.nodeDepth;
+    }
+
+    public boolean isConstant(){
+        return this.isConstant;
     }
 }

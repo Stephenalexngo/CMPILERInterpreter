@@ -21,6 +21,7 @@ public class MyListener extends MainBaseListener {
     public ErrorRepository errorRepo;
     public String currentFunction = "";
     public int currentNode = 0;
+    public boolean isConstant = false;
     HashMap<String, FuncClass> funcTable = SymbolTableManager.getInstance().getFuncTable();
 
     public MyListener(MainParser parser) {
@@ -100,6 +101,16 @@ public class MyListener extends MainBaseListener {
         return expression;
     }
 
+    @Override public void enterAny_declaration(MainParser.Any_declarationContext ctx) { 
+        if(ctx.CONSTANT() != null){
+            isConstant = true;
+        }
+    }
+
+    @Override public void exitAny_declaration(MainParser.Any_declarationContext ctx) { 
+        isConstant = false;
+    }
+
     @Override
     public void enterInt_declaration(MainParser.Int_declarationContext ctx) {
         String expr = "";
@@ -110,7 +121,17 @@ public class MyListener extends MainBaseListener {
                     funcTable.get(currentFunction).getVarTable());
         } else if (ctx.INT_NUMBER() != null) {
             expr = ctx.INT_NUMBER().getText();
+        } else if(ctx.function_calling() != null) {
+            if(funcTable.containsKey(ctx.function_calling().LABEL().getText())){
+                if(funcTable.get(ctx.function_calling().LABEL().getText()).getType().equals("int")){
+                    expr = "0";
+                }
+                else{
+                    errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.function_calling().LABEL().getText(), ctx.getStart().getLine());
+                }
+            }
         }
+
 
         if (!funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().getText())
                 && !funcTable.get(currentFunction).getVarArrTable().containsKey(ctx.LABEL().getText())){
@@ -136,7 +157,7 @@ public class MyListener extends MainBaseListener {
                             String value = result.intValue() + "";
     
                             funcTable.get(currentFunction).getVarTable().put(varname,
-                                    new VarClass(type, varname, value, currentFunction, currentNode));
+                                    new VarClass(type, varname, value, currentFunction, currentNode, isConstant));
                         } else
                             errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().getText(), ctx.getStart().getLine());
                     } else {
@@ -163,6 +184,15 @@ public class MyListener extends MainBaseListener {
                     funcTable.get(currentFunction).getVarTable());
         } else if (ctx.FLOAT_NUMBER() != null) {
             expr = ctx.FLOAT_NUMBER().getText().replace("f", "");
+        } else if(ctx.function_calling() != null) {
+            if(funcTable.containsKey(ctx.function_calling().LABEL().getText())){
+                if(funcTable.get(ctx.function_calling().LABEL().getText()).getType().equals("float")){
+                    expr = "0";
+                }
+                else{
+                    errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.function_calling().LABEL().getText(), ctx.getStart().getLine());
+                }
+            }
         }
 
         if (!funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().getText())
@@ -189,7 +219,7 @@ public class MyListener extends MainBaseListener {
                         String value = result.intValue() + "";
     
                         funcTable.get(currentFunction).getVarTable().put(varname,
-                                new VarClass(type, varname, value, currentFunction, currentNode));
+                                new VarClass(type, varname, value, currentFunction, currentNode, isConstant));
                     } else {
                         funcTable.get(currentFunction).getVarTable().put(varname,
                                 new VarClass(type, varname, currentFunction, currentNode));
@@ -209,6 +239,15 @@ public class MyListener extends MainBaseListener {
 
         if (ctx.STRING_TYPE() != null) {
             expr = ctx.STRING_TYPE().getText();
+        } else if(ctx.function_calling() != null) {
+            if(funcTable.containsKey(ctx.function_calling().LABEL().getText())){
+                if(funcTable.get(ctx.function_calling().LABEL().getText()).getType().equals("String")){
+                    expr = "0";
+                }
+                else{
+                    errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.function_calling().LABEL().getText(), ctx.getStart().getLine());
+                }
+            }
         }
 
         if (!funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().getText())
@@ -230,7 +269,7 @@ public class MyListener extends MainBaseListener {
                 if (!expr.equals("")) {
                     expr = expr.replace("\"", "");
                     funcTable.get(currentFunction).getVarTable().put(varname,
-                            new VarClass(type, varname, expr, currentFunction, currentNode));
+                            new VarClass(type, varname, expr, currentFunction, currentNode, isConstant));
                 } else {
                     funcTable.get(currentFunction).getVarTable().put(varname,
                             new VarClass(type, varname, currentFunction, currentNode));
@@ -252,6 +291,15 @@ public class MyListener extends MainBaseListener {
             Token last = ctx.comparison_statement().stop;
             expr = convertLogical(tokens.getTokens(first.getTokenIndex(), last.getTokenIndex()),
                     funcTable.get(currentFunction).getVarTable());
+        } else if(ctx.function_calling() != null) {
+            if(funcTable.containsKey(ctx.function_calling().LABEL().getText())){
+                if(funcTable.get(ctx.function_calling().LABEL().getText()).getType().equals("bool")){
+                    expr = "0";
+                }
+                else{
+                    errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.function_calling().LABEL().getText(), ctx.getStart().getLine());
+                }
+            }
         }
 
         if (!funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().get(0).getText())
@@ -278,7 +326,7 @@ public class MyListener extends MainBaseListener {
                         String value = result.intValue() + "";
     
                         funcTable.get(currentFunction).getVarTable().put(varname,
-                                new VarClass(type, varname, value, currentFunction, currentNode));
+                                new VarClass(type, varname, value, currentFunction, currentNode, isConstant));
                     } else {
                         funcTable.get(currentFunction).getVarTable().put(varname,
                                 new VarClass(type, varname, currentFunction, currentNode));
@@ -327,7 +375,7 @@ public class MyListener extends MainBaseListener {
                             String value = result.intValue() + "";
     
                             funcTable.get(currentFunction).getVarArrTable().put(varname,
-                                    new VarArrClass(type, varname, value, currentFunction, currentNode));
+                                    new VarArrClass(type, varname, value, currentFunction, currentNode, isConstant));
                         } else
                             errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).getText(),
                                     ctx.getStart().getLine());
@@ -379,7 +427,7 @@ public class MyListener extends MainBaseListener {
                             String value = result.intValue() + "";
     
                             funcTable.get(currentFunction).getVarArrTable().put(varname,
-                                    new VarArrClass(type, varname, value, currentFunction, currentNode));
+                                    new VarArrClass(type, varname, value, currentFunction, currentNode, isConstant));
                         } else
                             errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().getText(), ctx.getStart().getLine());
                     } else {
@@ -430,7 +478,7 @@ public class MyListener extends MainBaseListener {
                             String value = result.intValue() + "";
     
                             funcTable.get(currentFunction).getVarArrTable().put(varname,
-                                    new VarArrClass(type, varname, value, currentFunction, currentNode));
+                                    new VarArrClass(type, varname, value, currentFunction, currentNode, isConstant));
                         } else
                             errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).getText(),
                                     ctx.getStart().getLine());
@@ -482,7 +530,7 @@ public class MyListener extends MainBaseListener {
                             String value = result.intValue() + "";
     
                             funcTable.get(currentFunction).getVarArrTable().put(varname,
-                                    new VarArrClass(type, varname, value, currentFunction, currentNode));
+                                    new VarArrClass(type, varname, value, currentFunction, currentNode, isConstant));
                         } else
                             errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).getText(),
                                     ctx.getStart().getLine());
@@ -535,7 +583,8 @@ public class MyListener extends MainBaseListener {
     public void enterFunction_calling(MainParser.Function_callingContext ctx) {
         if (!funcTable.containsKey(ctx.LABEL().getText())) {
             errorRepo.reportErrorMessage("UNDECLARED_FUNCTION", ctx.LABEL().getText(), ctx.getStart().getLine());
-        } else {
+        } 
+        else if(ctx.function_paremeters_value().size() != 0){
             int funcCallingSize = ctx.function_paremeters_value().size();
 
             if (funcCallingSize != funcTable.get(ctx.LABEL().getText()).getParams().size()) {
@@ -668,7 +717,27 @@ public class MyListener extends MainBaseListener {
                     errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.getChild(1).getText(), ctx.getStart().getLine());
                 }
             }
+            else if(funcType.equals("bool")){
+                if(ctx.comparison_statement() == null){
+                    errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.getChild(1).getText(), ctx.getStart().getLine());
+                }
+            }
         }
+    }
+
+    @Override public void enterAssignment_statement(MainParser.Assignment_statementContext ctx) { 
+        // check if constant cannot asisgn
+        // check if variable exists or not - functable(currentfunction).getvartable.containsKey()
+        // after check if exist check if same type assigment pero pag float = int ok lang pero bawal int = float :D
+        // yun function calling check mo lang type pero assign mo sa vartable = 0 yun value :D
+    }
+
+    @Override public void enterConditional_statement(MainParser.Conditional_statementContext ctx) { 
+        currentNode++;
+    }
+
+    @Override public void exitConditional_statement(MainParser.Conditional_statementContext ctx) { 
+        currentNode--;
     }
 
     @Override
