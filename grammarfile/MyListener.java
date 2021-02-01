@@ -36,17 +36,24 @@ public class MyListener extends MainBaseListener {
         for (int x = 0; x < listtoken.size(); x++) {
             if (listtoken.get(x).getType() == 51) {
                 if (varTable.containsKey(listtoken.get(x).getText())) {
-                    if(varTable.get(listtoken.get(x).getText()).getType().equals("String")){
-                        errorRepo.reportErrorMessage("TYPE_MISMATCH", listtoken.get(x).getText(), listtoken.get(x).getLine());
+                    if(varTable.get(listtoken.get(x).getText()).getDepth() <= currentNode){
+                        if(varTable.get(listtoken.get(x).getText()).getType().equals("String")){
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", listtoken.get(x).getText(), listtoken.get(x).getLine());
+                        }
+                        else{
+                            if (!varTable.get(listtoken.get(x).getText()).getValue().isEmpty())
+                                expression += varTable.get(listtoken.get(x).getText()).getValue();
+                            else {
+                                errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
+                                        listtoken.get(x).getLine());
+                                return "null";
+                            }
+                        }
                     }
                     else{
-                        if (!varTable.get(listtoken.get(x).getText()).getValue().isEmpty())
-                            expression += varTable.get(listtoken.get(x).getText()).getValue();
-                        else {
-                            errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
-                                    listtoken.get(x).getLine());
-                            return "null";
-                        }
+                        errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
+                            listtoken.get(x).getLine());
+                        return "null";
                     }
                 } else {
                     errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
@@ -73,21 +80,31 @@ public class MyListener extends MainBaseListener {
                     expression += "0";
                 } else {
                     if (varTable.containsKey(listtoken.get(x).getText())) {
-                        if(varTable.get(listtoken.get(x).getText()).getType().equals("String")){
-                            errorRepo.reportErrorMessage("TYPE_MISMATCH", listtoken.get(x).getText(), listtoken.get(x).getLine());
+                        if(varTable.get(listtoken.get(x).getText()).getDepth() <= currentNode){
+                            if(varTable.get(listtoken.get(x).getText()).getType().equals("String")){
+                                errorRepo.reportErrorMessage("TYPE_MISMATCH", listtoken.get(x).getText(), listtoken.get(x).getLine());
+                            }
+                            else{
+                                if (!varTable.get(listtoken.get(x).getText()).getValue().isEmpty())
+                                    expression += varTable.get(listtoken.get(x).getText()).getValue();
+                                else {
+                                    errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
+                                            listtoken.get(x).getLine());
+                                            System.out.println("HELLO3");
+                                    return "null";
+                                }
+                            }
                         }
                         else{
-                            if (!varTable.get(listtoken.get(x).getText()).getValue().isEmpty())
-                                expression += varTable.get(listtoken.get(x).getText()).getValue();
-                            else {
-                                errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
-                                        listtoken.get(x).getLine());
-                                return "null";
-                            }
+                            errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
+                                listtoken.get(x).getLine());
+                                System.out.println("HELLO2");
+                            return "null";
                         }
                     } else {
                         errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
                                 listtoken.get(x).getLine());
+                                System.out.println("HELLO1");
                         return "null";
                     }
                 }
@@ -733,7 +750,6 @@ public class MyListener extends MainBaseListener {
         // yun function calling check mo lang type pero assign mo sa vartable = 0 yun value :D
         String varName = ctx.LABEL(0).toString();
 
-        
         if(!funcTable.get(currentFunction).getVarTable().containsKey(varName)){
             errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", varName, ctx.getStart().getLine());
         }else{
@@ -855,6 +871,17 @@ public class MyListener extends MainBaseListener {
 
     @Override public void enterConditional_statement(MainParser.Conditional_statementContext ctx) { 
         currentNode++;
+        Token if_first = ctx.conditional_comparison_structure(0).comparison_statement().start;
+        Token if_last = ctx.conditional_comparison_structure(0).comparison_statement().stop;
+        String if_value = convertLogical(tokens.getTokens(if_first.getTokenIndex(), if_last.getTokenIndex()),
+        funcTable.get(currentFunction).getVarTable());
+
+        for(int x=0; x<ctx.ELSE_IF().size(); x++){
+            Token else_if_first = ctx.conditional_comparison_structure(1).comparison_statement().start;
+            Token else_if_last = ctx.conditional_comparison_structure(1).comparison_statement().stop;
+            String else_if_value = convertLogical(tokens.getTokens(else_if_first.getTokenIndex(), else_if_last.getTokenIndex()),
+            funcTable.get(currentFunction).getVarTable());
+        }
     }
 
     @Override public void exitConditional_statement(MainParser.Conditional_statementContext ctx) { 

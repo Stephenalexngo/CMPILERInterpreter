@@ -7,6 +7,7 @@ public class VarArrClass {
     private String parentFunction;
     private int nodeDepth;
     private boolean isConstant;
+    private String[] values;
 
     public VarArrClass(String type, String name, String parent, int depth){
         this.datatype = type;
@@ -15,6 +16,7 @@ public class VarArrClass {
         this.parentFunction = parent;
         this.nodeDepth = depth;
         this.isConstant = false;
+        this.values = null;
     }
 
     public VarArrClass(String type, String name, String size, String parent, int depth, boolean isConstant){
@@ -24,6 +26,7 @@ public class VarArrClass {
         this.parentFunction = parent;
         this.nodeDepth = depth;
         this.isConstant = isConstant;
+        this.values = new String[Integer.parseInt(size)];
     }
 
     public String getType(){
@@ -48,5 +51,9 @@ public class VarArrClass {
 
     public boolean isConstant(){
         return this.isConstant;
+    }
+
+    public String[] getValues(){
+        return this.values;
     }
 }
