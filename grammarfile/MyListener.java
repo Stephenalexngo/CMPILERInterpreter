@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 
 import errorfiles.ErrorRepository;
+import grammarfile.MainParser.Function_callingContext;
 import grammarfile.MainParser.Function_declaration_parametersContext;
 import grammarfile.MainParser.Function_paremeters_valueContext;
 import model.*;
@@ -730,6 +731,36 @@ public class MyListener extends MainBaseListener {
         // check if variable exists or not - functable(currentfunction).getvartable.containsKey()
         // after check if exist check if same type assigment pero pag float = int ok lang pero bawal int = float :D
         // yun function calling check mo lang type pero assign mo sa vartable = 0 yun value :D
+
+        if(!funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().get(0).toString())){
+            errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", ctx.LABEL().get(0).toString(), ctx.getStart().getLine());
+        }else{
+            if(funcTable.get(currentFunction).getVarTable().get(ctx.LABEL().get(0).toString()).isConstant()){
+                errorRepo.reportErrorMessage("CONSTANT_REASSIGNMENT", ctx.LABEL().get(0).toString(), ctx.getStart().getLine());
+            }else if(funcTable.get(currentFunction).getVarTable().get(ctx.LABEL().get(0).toString()).getType().equals("int")){
+                if(ctx.number() == null){
+                    errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).toString(), ctx.getStart().getLine());
+                }else{
+                    if(ctx.number().INT_NUMBER() == null){
+                        errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).toString(), ctx.getStart().getLine());
+                    }
+                }
+            }else if(funcTable.get(currentFunction).getVarTable().get(ctx.LABEL().get(0).toString()).getType().equals("float")){
+                if(ctx.number() == null){
+                    errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).toString(), ctx.getStart().getLine());
+                }else{
+                    if(ctx.number().FLOAT_NUMBER() == null){
+                        errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).toString(), ctx.getStart().getLine());
+                    }
+                }
+            }else if(funcTable.get(currentFunction).getVarTable().get(ctx.LABEL().get(0).toString()).getType().equals("String")){
+                if(ctx.STRING_TYPE() == null){
+                    errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().get(0).toString(), ctx.getStart().getLine());
+                }
+            }
+        }
+ 
+        //get ctx.LABEL type then compare to (LABEL (OPEN_BRACE expression CLOSE_BRACE)? | number | STRING_TYPE | expression | comparison_statement)
     }
 
     @Override public void enterConditional_statement(MainParser.Conditional_statementContext ctx) { 
