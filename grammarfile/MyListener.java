@@ -132,6 +132,14 @@ public class MyListener extends MainBaseListener {
         isConstant = false;
     }
 
+    @Override public void enterScoping_statement(MainParser.Scoping_statementContext ctx) { 
+        currentNode++;
+    }
+
+    @Override public void exitScoping_statement(MainParser.Scoping_statementContext ctx) { 
+        currentNode--;
+    }
+
     @Override
     public void enterInt_declaration(MainParser.Int_declarationContext ctx) {
         String expr = "";
@@ -888,6 +896,43 @@ public class MyListener extends MainBaseListener {
     }
 
     @Override public void exitConditional_statement(MainParser.Conditional_statementContext ctx) { 
+        currentNode--;
+    }
+
+    @Override public void enterWhile_statement(MainParser.While_statementContext ctx) { 
+        currentNode++;
+        Token first_exp_start = ctx.expression().start;
+        Token first_exp_stop = ctx.expression().stop;
+        String first_value = convertLogical(tokens.getTokens(first_exp_start.getTokenIndex(), first_exp_stop.getTokenIndex()),
+        funcTable.get(currentFunction).getVarTable());
+
+        Token second_exp_start = ctx.loop_structure().expression().start;
+        Token second_exp_stop = ctx.loop_structure().expression().stop;
+        String second_value = convertLogical(tokens.getTokens(second_exp_start.getTokenIndex(), second_exp_stop.getTokenIndex()),
+        funcTable.get(currentFunction).getVarTable());
+    }
+
+	@Override public void exitWhile_statement(MainParser.While_statementContext ctx) { 
+        currentNode--;
+    }
+
+	@Override public void enterFor_statement(MainParser.For_statementContext ctx) { 
+        currentNode++;
+
+        if(ctx.loop_variable_declaration().expression() != null){
+            Token first_exp_start = ctx.loop_variable_declaration().expression().start;
+            Token first_exp_stop = ctx.loop_variable_declaration().expression().stop;
+            String first_value = convertLogical(tokens.getTokens(first_exp_start.getTokenIndex(), first_exp_stop.getTokenIndex()),
+            funcTable.get(currentFunction).getVarTable());
+        }
+        
+        Token second_exp_start = ctx.loop_structure().expression().start;
+        Token second_exp_stop = ctx.loop_structure().expression().stop;
+        String second_value = convertLogical(tokens.getTokens(second_exp_start.getTokenIndex(), second_exp_stop.getTokenIndex()),
+        funcTable.get(currentFunction).getVarTable());
+    }
+
+	@Override public void exitFor_statement(MainParser.For_statementContext ctx) { 
         currentNode--;
     }
 

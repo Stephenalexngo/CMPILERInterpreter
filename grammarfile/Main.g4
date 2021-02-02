@@ -59,7 +59,7 @@ conditional_body: left_bracket statements+ right_bracket;
 loop_statement: (while_statement | for_statement);
 while_statement: WHILE expression loop_structure;
 for_statement: FOR loop_variable_declaration loop_structure;
-loop_variable_declaration: (variable_type? LABEL (ASSIGN (number | LABEL | expression))? | expression);
+loop_variable_declaration: int_declaration | expression;
 loop_structure: (UP_TO | DOWN_TO) expression left_bracket statements* right_bracket;
 
 // function calling
