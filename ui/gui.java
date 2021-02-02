@@ -79,7 +79,7 @@ public class gui extends Application {
         Button btnCompile = new Button("Compile");        
 
         HBox hbox = new HBox(btnCompile);
-        hbox.setAlignment(Pos.BASELINE_LEFT);
+        hbox.setAlignment(Pos.BASELINE_RIGHT);
 
         primaryStage.setTitle("CMPILER");
 

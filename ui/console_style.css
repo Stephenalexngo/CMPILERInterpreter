@@ -10,10 +10,16 @@
 }
 
 #compile {
-    -fx-background-color: #354b35;
-    -fx-text-fill: white;
+    -fx-background-color: 
+        linear-gradient(#ffffff, #ffffff),
+        linear-gradient(#fcfcfc 0%, #ffffff 20%, #ffffff 100%),
+        linear-gradient(#ffffff 0%, #ffffff 50%);
+    -fx-background-insets: 0,1,2;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 
+
 #compile:hover{
-    -fx-background-color: #648a64;
+    -fx-background-color: #969c96;
 }
