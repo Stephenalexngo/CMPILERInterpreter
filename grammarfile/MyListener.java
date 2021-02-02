@@ -4,7 +4,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 
 import errorfiles.ErrorRepository;
-import grammarfile.MainParser.Function_callingContext;
 import grammarfile.MainParser.Function_declaration_parametersContext;
 import grammarfile.MainParser.Function_paremeters_valueContext;
 import model.*;
@@ -32,6 +31,7 @@ public class MyListener extends MainBaseListener {
 
     public String convertExpression(List<Token> listtoken, HashMap<String, VarClass> varTable) {
         String expression = "";
+        boolean isError = false;
 
         for (int x = 0; x < listtoken.size(); x++) {
             if (listtoken.get(x).getType() == 51) {
@@ -46,19 +46,19 @@ public class MyListener extends MainBaseListener {
                             else {
                                 errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
                                         listtoken.get(x).getLine());
-                                return "null";
+                                isError=true;
                             }
                         }
                     }
                     else{
                         errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
                             listtoken.get(x).getLine());
-                        return "null";
+                            isError=true;
                     }
                 } else {
                     errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
                             listtoken.get(x).getLine());
-                    return "null";
+                    isError=true;
                 }
             }
             else {
@@ -66,7 +66,10 @@ public class MyListener extends MainBaseListener {
             }
         }
 
-        return expression;
+        if(isError)
+            return "null";
+        else
+            return expression;
     }
 
     public String convertLogical(List<Token> listtoken, HashMap<String, VarClass> varTable) {

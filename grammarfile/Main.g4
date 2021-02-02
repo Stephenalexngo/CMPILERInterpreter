@@ -32,13 +32,13 @@ assignment_statement: LABEL (OPEN_BRACE expression CLOSE_BRACE)? ASSIGN (LABEL (
 
 // print statement
 print_statement: PRINT OPEN_PAREN extended_value_print (PLUS extended_value_print)* CLOSE_PAREN;
-extended_value_print: STRING_TYPE | LABEL | expression | function_calling;
+extended_value_print: STRING_TYPE | LABEL | function_calling | expression;
 
 // scan statement
 scan_statement: SCAN OPEN_PAREN STRING_TYPE COMMA LABEL CLOSE_PAREN;
 
 // return statement
-return_statement: RETURN (STRING_TYPE | number | LABEL | expression | comparison_statement | function_calling);
+return_statement: RETURN (STRING_TYPE | number | LABEL | function_calling | expression | comparison_statement);
 
 // arithmetic statement
 expression: second_operator_expression;
@@ -64,7 +64,7 @@ loop_structure: (UP_TO | DOWN_TO) expression left_bracket statements* right_brac
 
 // function calling
 function_calling: LABEL OPEN_PAREN (function_paremeters_value (COMMA function_paremeters_value)*)? CLOSE_PAREN;
-function_paremeters_value: LABEL | number | STRING_TYPE | expression | function_calling;
+function_paremeters_value: LABEL | number | STRING_TYPE | function_calling | expression;
 
 // function declaration
 function_declaration: FUNC (variable_type (OPEN_BRACE CLOSE_BRACE)? | VOID) function_structure;

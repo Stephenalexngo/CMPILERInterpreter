@@ -1706,11 +1706,11 @@ public class MainParser extends Parser {
 	public static class Extended_value_printContext extends ParserRuleContext {
 		public TerminalNode STRING_TYPE() { return getToken(MainParser.STRING_TYPE, 0); }
 		public TerminalNode LABEL() { return getToken(MainParser.LABEL, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
 		public Function_callingContext function_calling() {
 			return getRuleContext(Function_callingContext.class,0);
+		}
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public Extended_value_printContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1751,14 +1751,14 @@ public class MainParser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(280);
-				expression();
+				function_calling();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(281);
-				function_calling();
+				expression();
 				}
 				break;
 			}
@@ -1833,14 +1833,14 @@ public class MainParser extends Parser {
 			return getRuleContext(NumberContext.class,0);
 		}
 		public TerminalNode LABEL() { return getToken(MainParser.LABEL, 0); }
+		public Function_callingContext function_calling() {
+			return getRuleContext(Function_callingContext.class,0);
+		}
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
 		public Comparison_statementContext comparison_statement() {
 			return getRuleContext(Comparison_statementContext.class,0);
-		}
-		public Function_callingContext function_calling() {
-			return getRuleContext(Function_callingContext.class,0);
 		}
 		public Return_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1888,19 +1888,19 @@ public class MainParser extends Parser {
 			case 4:
 				{
 				setState(295);
-				expression();
+				function_calling();
 				}
 				break;
 			case 5:
 				{
 				setState(296);
-				comparison_statement();
+				expression();
 				}
 				break;
 			case 6:
 				{
 				setState(297);
-				function_calling();
+				comparison_statement();
 				}
 				break;
 			}
@@ -3103,11 +3103,11 @@ public class MainParser extends Parser {
 			return getRuleContext(NumberContext.class,0);
 		}
 		public TerminalNode STRING_TYPE() { return getToken(MainParser.STRING_TYPE, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
 		public Function_callingContext function_calling() {
 			return getRuleContext(Function_callingContext.class,0);
+		}
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public Function_paremeters_valueContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -3155,14 +3155,14 @@ public class MainParser extends Parser {
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(458);
-				expression();
+				function_calling();
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(459);
-				function_calling();
+				expression();
 				}
 				break;
 			}
@@ -3801,13 +3801,13 @@ public class MainParser extends Parser {
 		"\5*\26\2\u010f\u0110\7!\2\2\u0110\u0112\5*\26\2\u0111\u010f\3\2\2\2\u0112"+
 		"\u0115\3\2\2\2\u0113\u0111\3\2\2\2\u0113\u0114\3\2\2\2\u0114\u0116\3\2"+
 		"\2\2\u0115\u0113\3\2\2\2\u0116\u0117\7\30\2\2\u0117)\3\2\2\2\u0118\u011d"+
-		"\7\62\2\2\u0119\u011d\7\65\2\2\u011a\u011d\5\60\31\2\u011b\u011d\5L\'"+
+		"\7\62\2\2\u0119\u011d\7\65\2\2\u011a\u011d\5L\'\2\u011b\u011d\5\60\31"+
 		"\2\u011c\u0118\3\2\2\2\u011c\u0119\3\2\2\2\u011c\u011a\3\2\2\2\u011c\u011b"+
 		"\3\2\2\2\u011d+\3\2\2\2\u011e\u011f\7\7\2\2\u011f\u0120\7\27\2\2\u0120"+
 		"\u0121\7\62\2\2\u0121\u0122\7/\2\2\u0122\u0123\7\65\2\2\u0123\u0124\7"+
 		"\30\2\2\u0124-\3\2\2\2\u0125\u012c\7\5\2\2\u0126\u012d\7\62\2\2\u0127"+
-		"\u012d\5\6\4\2\u0128\u012d\7\65\2\2\u0129\u012d\5\60\31\2\u012a\u012d"+
-		"\58\35\2\u012b\u012d\5L\'\2\u012c\u0126\3\2\2\2\u012c\u0127\3\2\2\2\u012c"+
+		"\u012d\5\6\4\2\u0128\u012d\7\65\2\2\u0129\u012d\5L\'\2\u012a\u012d\5\60"+
+		"\31\2\u012b\u012d\58\35\2\u012c\u0126\3\2\2\2\u012c\u0127\3\2\2\2\u012c"+
 		"\u0128\3\2\2\2\u012c\u0129\3\2\2\2\u012c\u012a\3\2\2\2\u012c\u012b\3\2"+
 		"\2\2\u012d/\3\2\2\2\u012e\u012f\5\62\32\2\u012f\61\3\2\2\2\u0130\u0131"+
 		"\b\32\1\2\u0131\u0132\5\64\33\2\u0132\u013b\3\2\2\2\u0133\u0134\f\5\2"+
@@ -3862,7 +3862,7 @@ public class MainParser extends Parser {
 		"\2\2\u01c3\u01c6\3\2\2\2\u01c4\u01c2\3\2\2\2\u01c5\u01bd\3\2\2\2\u01c5"+
 		"\u01c6\3\2\2\2\u01c6\u01c7\3\2\2\2\u01c7\u01c8\7\30\2\2\u01c8M\3\2\2\2"+
 		"\u01c9\u01cf\7\65\2\2\u01ca\u01cf\5\6\4\2\u01cb\u01cf\7\62\2\2\u01cc\u01cf"+
-		"\5\60\31\2\u01cd\u01cf\5L\'\2\u01ce\u01c9\3\2\2\2\u01ce\u01ca\3\2\2\2"+
+		"\5L\'\2\u01cd\u01cf\5\60\31\2\u01ce\u01c9\3\2\2\2\u01ce\u01ca\3\2\2\2"+
 		"\u01ce\u01cb\3\2\2\2\u01ce\u01cc\3\2\2\2\u01ce\u01cd\3\2\2\2\u01cfO\3"+
 		"\2\2\2\u01d0\u01d7\7\t\2\2\u01d1\u01d4\5\4\3\2\u01d2\u01d3\7\33\2\2\u01d3"+
 		"\u01d5\7\34\2\2\u01d4\u01d2\3\2\2\2\u01d4\u01d5\3\2\2\2\u01d5\u01d8\3"+

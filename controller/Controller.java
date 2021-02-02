@@ -9,19 +9,12 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStream;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-
-import com.udojava.evalex.Expression;
 
 import customfiles.*;
-import commandfiles.*;
 import model.*;
 import ui.gui;
 import grammarfile.*;
-import ui.*;
 
 public class Controller {
     public static void showTree(String input) throws Exception {
