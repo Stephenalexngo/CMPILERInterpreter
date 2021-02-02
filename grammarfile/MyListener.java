@@ -55,7 +55,16 @@ public class MyListener extends MainBaseListener {
                             listtoken.get(x).getLine());
                             isError=true;
                     }
-                } else {
+                } 
+                else if(funcTable.get(currentFunction).getParams().containsKey(listtoken.get(x).getText())){
+                    if(funcTable.get(currentFunction).getParams().get(listtoken.get(x).getText()).getType().equals("String")){
+                        errorRepo.reportErrorMessage("TYPE_MISMATCH", listtoken.get(x).getText(), listtoken.get(x).getLine());
+                    }
+                    else{
+                        expression += "0";
+                    }
+                }
+                else {
                     errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
                             listtoken.get(x).getLine());
                     isError=true;
