@@ -3,6 +3,7 @@ package grammarfile;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 
+import commandfiles.PrintCommand;
 import errorfiles.ErrorRepository;
 import grammarfile.MainParser.Function_declaration_parametersContext;
 import grammarfile.MainParser.Function_paremeters_valueContext;
@@ -81,12 +82,14 @@ public class MyListener extends MainBaseListener {
                             isError=true;
                     }
                 } 
-                else if(funcTable.get(currentFunction).getParams().containsKey(listtoken.get(x).getText())){
-                    if(funcTable.get(currentFunction).getParams().get(listtoken.get(x).getText()).getType().equals("String")){
-                        errorRepo.reportErrorMessage("TYPE_MISMATCH", listtoken.get(x).getText(), listtoken.get(x).getLine());
-                    }
-                    else{
-                        expression += "0";
+                else if(funcTable.get(currentFunction).getParams() != null){
+                    if(funcTable.get(currentFunction).getParams().containsKey(listtoken.get(x).getText())){
+                        if(funcTable.get(currentFunction).getParams().get(listtoken.get(x).getText()).getType().equals("String")){
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", listtoken.get(x).getText(), listtoken.get(x).getLine());
+                        }
+                        else{
+                            expression += "0";
+                        }
                     }
                 }
                 else {
@@ -618,7 +621,8 @@ public class MyListener extends MainBaseListener {
                         funcTable.get(currentFunction).getVarTable());
 
                 if (!expr.equals("null")) {
-                    // put in PrintCommand
+                    PrintCommand print = new PrintCommand(expr,currentFunction);
+                    SymbolTableManager.getInstance().getCommands().add(print);
                 }
             } else if (ctx.extended_value_print().get(x).LABEL() != null) {
                 String key = ctx.extended_value_print().get(x).LABEL().getText();

@@ -1,10 +1,12 @@
 package model;
 
-import java.util.HashMap;
+import java.util.*;
+import commandfiles.*;
 
 public class SymbolTableManager {
     private static HashMap<String, FuncClass> funcTable;
     private static SymbolTableManager INSTANCE = null;
+    private static ArrayList<ICommand> arrCommands;
 
     private SymbolTableManager(){
         funcTable = new HashMap<String, FuncClass>();
@@ -19,6 +21,10 @@ public class SymbolTableManager {
             INSTANCE = new SymbolTableManager();
         }
         return INSTANCE;
+    }
+
+    public ArrayList<ICommand> getCommands(){
+        return this.arrCommands;
     }
 
     public HashMap<String, FuncClass> getFuncTable(){
