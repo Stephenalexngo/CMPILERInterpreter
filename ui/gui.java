@@ -11,6 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import model.SymbolTableManager;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -119,8 +120,9 @@ public class gui extends Application {
 
                 try{
                     if(Controller.parse(codeArea.getText())){
-                        // Controller.showTree(codeArea.getText());
-                        // interpret();
+                        for(int x=0; x<SymbolTableManager.getInstance().getCommands().size(); x++){
+                            SymbolTableManager.getInstance().getCommands().get(0).execute();
+                        }
                     }
                 }catch(Exception e){
                     e.printStackTrace();

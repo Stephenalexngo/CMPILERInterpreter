@@ -51,7 +51,7 @@ public class Controller {
         walker.walk(new MyListener(parser), tree);
 
         if(customErrorListener.getErrorList() == 0){
-            gui.getTextArea().appendText("No Syntax Errors");
+            gui.getTextArea().appendText("No Syntax Errors" + '\n');
             return true;
         }
 

@@ -10,6 +10,7 @@ public class SymbolTableManager {
 
     private SymbolTableManager(){
         funcTable = new HashMap<String, FuncClass>();
+        arrCommands = new ArrayList<ICommand>();
     }
 
     public static void initialize(){
@@ -21,6 +22,10 @@ public class SymbolTableManager {
             INSTANCE = new SymbolTableManager();
         }
         return INSTANCE;
+    }
+
+    public void setCommands(ArrayList<ICommand> commands){
+        this.arrCommands = commands;
     }
 
     public ArrayList<ICommand> getCommands(){

@@ -3,6 +3,7 @@ package grammarfile;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 
+import commandfiles.ICommand;
 import commandfiles.PrintCommand;
 import errorfiles.ErrorRepository;
 import grammarfile.MainParser.Function_declaration_parametersContext;
@@ -24,6 +25,7 @@ public class MyListener extends MainBaseListener {
     public int currentNode = 0;
     public boolean isConstant = false;
     HashMap<String, FuncClass> funcTable = SymbolTableManager.getInstance().getFuncTable();
+    ArrayList<ICommand> arrCommand = SymbolTableManager.getInstance().getCommands();
 
     public MyListener(MainParser parser) {
         this.tokens = (CommonTokenStream) parser.getTokenStream();
@@ -278,9 +280,10 @@ public class MyListener extends MainBaseListener {
     
                     if (!expr.equals("")) {
                         EvalEx = new Expression(expr);
+                        EvalEx.setPrecision(3);
                         BigDecimal result = EvalEx.eval();
     
-                        String value = result.intValue() + "";
+                        String value = result.floatValue() + "";
     
                         funcTable.get(currentFunction).getVarTable().put(varname,
                                 new VarClass(type, varname, value, currentFunction, currentNode, isConstant));
@@ -613,6 +616,7 @@ public class MyListener extends MainBaseListener {
 
     @Override
     public void enterPrint_statement(MainParser.Print_statementContext ctx) {
+        String printexp = "";
         for (int x = 0; x < ctx.extended_value_print().size(); x++) {
             if (ctx.extended_value_print().get(x).expression() != null) {
                 Token first = ctx.extended_value_print().get(x).start;
@@ -621,8 +625,7 @@ public class MyListener extends MainBaseListener {
                         funcTable.get(currentFunction).getVarTable());
 
                 if (!expr.equals("null")) {
-                    PrintCommand print = new PrintCommand(expr,currentFunction);
-                    SymbolTableManager.getInstance().getCommands().add(print);
+                    printexp += expr;
                 }
             } else if (ctx.extended_value_print().get(x).LABEL() != null) {
                 String key = ctx.extended_value_print().get(x).LABEL().getText();
@@ -630,9 +633,19 @@ public class MyListener extends MainBaseListener {
                         && !funcTable.get(currentFunction).getVarArrTable().containsKey(key)) {
                     errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", key, ctx.getStart().getLine());
                 }
+                else{
+                    if (!key.equals("null")) {
+                        printexp += key;
+                    }
+                }
             }
-            // add else for STRING_TYPE() to put in PrintCommand
+            else {
+                printexp += ctx.extended_value_print().get(x).STRING_TYPE().getText().replace("\"", "");
+            }
         }
+        PrintCommand print = new PrintCommand(printexp,currentFunction);
+        arrCommand.add(print);
+        SymbolTableManager.getInstance().setCommands(arrCommand);
     }
 
     @Override
