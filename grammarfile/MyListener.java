@@ -29,6 +29,31 @@ public class MyListener extends MainBaseListener {
         this.errorRepo = new ErrorRepository();
     }
 
+    public void removeNodes(){
+        ArrayList<String> singleVar = new ArrayList<String>();
+        ArrayList<String> arrVar = new ArrayList<String>();
+
+        for(String key:  funcTable.get(currentFunction).getVarTable().keySet()){
+            if(funcTable.get(currentFunction).getVarTable().get(key).getDepth() == currentNode){
+                singleVar.add(key);
+            }
+        }
+        
+        for(String key:  funcTable.get(currentFunction).getVarArrTable().keySet()){
+            if(funcTable.get(currentFunction).getVarArrTable().get(key).getDepth() == currentNode){
+                arrVar.add(key);
+            }
+        }
+
+        for(int i=0; i<singleVar.size(); i++){
+            funcTable.get(currentFunction).getVarTable().remove(singleVar.get(i));
+        }
+
+        for(int i=0; i<arrVar.size(); i++){
+            funcTable.get(currentFunction).getVarArrTable().remove(arrVar.get(i));
+        }
+    }
+
     public String convertExpression(List<Token> listtoken, HashMap<String, VarClass> varTable) {
         String expression = "";
         boolean isError = false;
@@ -102,7 +127,6 @@ public class MyListener extends MainBaseListener {
                                 else {
                                     errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
                                             listtoken.get(x).getLine());
-                                            System.out.println("HELLO3");
                                     return "null";
                                 }
                             }
@@ -110,13 +134,11 @@ public class MyListener extends MainBaseListener {
                         else{
                             errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
                                 listtoken.get(x).getLine());
-                                System.out.println("HELLO2");
                             return "null";
                         }
                     } else {
                         errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
                                 listtoken.get(x).getLine());
-                                System.out.println("HELLO1");
                         return "null";
                     }
                 }
@@ -146,6 +168,7 @@ public class MyListener extends MainBaseListener {
     }
 
     @Override public void exitScoping_statement(MainParser.Scoping_statementContext ctx) { 
+        removeNodes();
         currentNode--;
     }
 
@@ -764,10 +787,6 @@ public class MyListener extends MainBaseListener {
     }
 
     @Override public void enterAssignment_statement(MainParser.Assignment_statementContext ctx) { 
-        // check if constant cannot asisgn
-        // check if variable exists or not - functable(currentfunction).getvartable.containsKey()
-        // after check if exist check if same type assigment pero pag float = int ok lang pero bawal int = float :D
-        // yun function calling check mo lang type pero assign mo sa vartable = 0 yun value :D
         String varName = ctx.LABEL(0).toString();
 
         if(funcTable.get(currentFunction).getVarTable().get(varName).getDepth() <= currentNode){
@@ -889,10 +908,6 @@ public class MyListener extends MainBaseListener {
         }else{
             errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", varName,  ctx.getStart().getLine());
         } 
-
-        
- 
-        //get ctx.LABEL type then compare to (LABEL (OPEN_BRACE expression CLOSE_BRACE)? | number | STRING_TYPE | expression | comparison_statement)
     }
 
     @Override public void enterConditional_statement(MainParser.Conditional_statementContext ctx) { 
@@ -911,6 +926,7 @@ public class MyListener extends MainBaseListener {
     }
 
     @Override public void exitConditional_statement(MainParser.Conditional_statementContext ctx) { 
+        removeNodes();
         currentNode--;
     }
 
@@ -928,6 +944,7 @@ public class MyListener extends MainBaseListener {
     }
 
 	@Override public void exitWhile_statement(MainParser.While_statementContext ctx) { 
+        removeNodes();
         currentNode--;
     }
 
@@ -948,6 +965,7 @@ public class MyListener extends MainBaseListener {
     }
 
 	@Override public void exitFor_statement(MainParser.For_statementContext ctx) { 
+        removeNodes();
         currentNode--;
     }
 
