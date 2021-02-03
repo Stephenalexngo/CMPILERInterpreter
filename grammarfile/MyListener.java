@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.Token;
 
 import commandfiles.ICommand;
 import commandfiles.PrintCommand;
+import commandfiles.ScanCommand;
 import errorfiles.ErrorRepository;
 import grammarfile.MainParser.Function_declaration_parametersContext;
 import grammarfile.MainParser.Function_paremeters_valueContext;
@@ -652,7 +653,9 @@ public class MyListener extends MainBaseListener {
         if (!funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().getText())) {
             errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", ctx.LABEL().getText(), ctx.getStart().getLine());
         } else {
-            // ScanCommand
+            ScanCommand scan = new ScanCommand(ctx.STRING_TYPE().getText(), ctx.LABEL().getText(), currentFunction, currentNode);
+            arrCommand.add(scan);
+            SymbolTableManager.getInstance().setCommands(arrCommand);
         }
     }
 
