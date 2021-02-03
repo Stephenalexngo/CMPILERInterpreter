@@ -49,4 +49,8 @@ public class VarClass {
     public boolean isConstant(){
         return this.isConstant;
     }
+
+    public void setValue(String value){
+        this.value = value;
+    }
 }

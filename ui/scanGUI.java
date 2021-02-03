@@ -67,15 +67,13 @@ public class scanGUI {
         btnScan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                funcTable.get(currFunc).getVarTable().put(varName, 
-                new VarClass(type, varName, inputText.getText(), currFunc, depth, false));
+                funcTable.get(currFunc).getVarTable().get(varName).setValue(inputText.getText());
                 primaryStage.close();
-                System.out.println(inputText.getText());
             }
         });
 
         primaryStage.setScene(scene);
-        primaryStage.show();
+        primaryStage.showAndWait();
     }
 
     public String getValue(){

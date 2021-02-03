@@ -644,6 +644,8 @@ public class MyListener extends MainBaseListener {
             }
         }
         PrintCommand print = new PrintCommand(printexp,currentFunction);
+        //System.out.println(funcTable.get(currentFunction).getVarTable().get("x").getValue());
+        //System.out.println("PRINT");
         arrCommand.add(print);
         SymbolTableManager.getInstance().setCommands(arrCommand);
     }
@@ -654,8 +656,7 @@ public class MyListener extends MainBaseListener {
             errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", ctx.LABEL().getText(), ctx.getStart().getLine());
         } else {
             ScanCommand scan = new ScanCommand(ctx.STRING_TYPE().getText(), ctx.LABEL().getText(), currentFunction, currentNode);
-            arrCommand.add(scan);
-            SymbolTableManager.getInstance().setCommands(arrCommand);
+            scan.execute();
         }
     }
 
