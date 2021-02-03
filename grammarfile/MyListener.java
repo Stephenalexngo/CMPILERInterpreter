@@ -969,12 +969,22 @@ public class MyListener extends MainBaseListener {
 
 	@Override public void enterFor_statement(MainParser.For_statementContext ctx) { 
         currentNode++;
+        String first_value = "0";
 
         if(ctx.loop_variable_declaration().expression() != null){
             Token first_exp_start = ctx.loop_variable_declaration().expression().start;
             Token first_exp_stop = ctx.loop_variable_declaration().expression().stop;
-            String first_value = convertLogical(tokens.getTokens(first_exp_start.getTokenIndex(), first_exp_stop.getTokenIndex()),
+            first_value = convertLogical(tokens.getTokens(first_exp_start.getTokenIndex(), first_exp_stop.getTokenIndex()),
             funcTable.get(currentFunction).getVarTable());
+        }
+        else if(ctx.loop_variable_declaration().int_declaration().expression() != null){
+            Token first_exp_start = ctx.loop_variable_declaration().int_declaration().expression().start;
+            Token first_exp_stop = ctx.loop_variable_declaration().int_declaration().expression().stop;
+            first_value = convertLogical(tokens.getTokens(first_exp_start.getTokenIndex(), first_exp_stop.getTokenIndex()),
+            funcTable.get(currentFunction).getVarTable());
+        }
+        else if(ctx.loop_variable_declaration().int_declaration().INT_NUMBER() != null){
+            first_value = ctx.loop_variable_declaration().int_declaration().INT_NUMBER().getText();
         }
         
         Token second_exp_start = ctx.loop_structure().expression().start;

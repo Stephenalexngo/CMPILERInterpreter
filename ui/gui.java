@@ -122,7 +122,7 @@ public class gui extends Application {
                 try{
                     if(Controller.parse(codeArea.getText()) && !ErrorRepository.getInstance().getError()){
                         for(int x=0; x<SymbolTableManager.getInstance().getCommands().size(); x++){
-                            SymbolTableManager.getInstance().getCommands().get(0).execute();
+                            SymbolTableManager.getInstance().getCommands().get(x).execute();
                         }
                     }
                 }catch(Exception e){
