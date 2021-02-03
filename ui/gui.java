@@ -95,8 +95,7 @@ public class gui extends Application {
         
         IntFunction<String> format = (digits -> " %" + digits + "d ");
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea, format));
-            codeArea.textProperty().addListener((obs, oldText, newText) -> {
-        });
+
         //codeArea.setStyleSpans(0, computeHighlighting(newText));
 
         codeArea.textProperty().addListener((obs, oldText, newText) -> {
