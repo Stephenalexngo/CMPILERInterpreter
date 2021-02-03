@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.CharStream;
 import java.util.Arrays;
 
 import customfiles.*;
+import errorfiles.ErrorRepository;
 import model.*;
 import ui.gui;
 import grammarfile.*;
@@ -32,6 +33,7 @@ public class Controller {
 
     public static boolean parse(String input) throws Exception {
         SymbolTableManager.initialize();
+        ErrorRepository.initialize();
 
         CharStream cStream = CharStreams.fromString(input);
 

@@ -20,7 +20,7 @@ public class MyListener extends MainBaseListener {
 
     public CommonTokenStream tokens;
     public Expression EvalEx;
-    public ErrorRepository errorRepo;
+    public ErrorRepository errorRepo = ErrorRepository.getInstance();
     public String currentFunction = "";
     public int currentNode = 0;
     public boolean isConstant = false;
@@ -29,7 +29,6 @@ public class MyListener extends MainBaseListener {
 
     public MyListener(MainParser parser) {
         this.tokens = (CommonTokenStream) parser.getTokenStream();
-        this.errorRepo = new ErrorRepository();
     }
 
     public void removeNodes(){
@@ -635,7 +634,7 @@ public class MyListener extends MainBaseListener {
                 }
                 else{
                     if (!key.equals("null")) {
-                        printexp += key;
+                        printexp += funcTable.get(currentFunction).getVarTable().get(key).getValue();
                     }
                 }
             }

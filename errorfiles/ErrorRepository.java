@@ -6,11 +6,25 @@ import ui.gui;
 
 public class ErrorRepository {
     private HashMap<String,String> errorMessage;
+    private static boolean hasErrors;
+    private static ErrorRepository INSTANCE = null;
 
-    public ErrorRepository() {
+    private ErrorRepository() {
 		this.errorMessage = new HashMap<String,String>();
-		this.produceMessages();
-	}
+        this.produceMessages();
+        this.hasErrors = false;
+    }
+    
+    public static void initialize(){
+        INSTANCE = new ErrorRepository();
+    }
+
+    public static ErrorRepository getInstance(){
+        if(INSTANCE == null){
+            INSTANCE = new ErrorRepository();
+        }
+        return INSTANCE;
+    }
 	
 	private void produceMessages() {
         this.errorMessage.put("UNDECLARED_VARIABLE", "Variable undeclared '%s' at line %d \n");
@@ -27,5 +41,10 @@ public class ErrorRepository {
     
     public void reportErrorMessage(String error, String token ,int line){
         gui.getTextArea().appendText(String.format(errorMessage.get(error), token, line));
+        this.hasErrors = true;
+    }
+
+    public boolean getError(){
+        return this.hasErrors;
     }
 }

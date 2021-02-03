@@ -29,6 +29,7 @@ import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
 
 import controller.*;
+import errorfiles.ErrorRepository;
 
 public class gui extends Application {
 
@@ -119,7 +120,7 @@ public class gui extends Application {
                 console.appendText("\n ======== COMPILED ======== \n");
 
                 try{
-                    if(Controller.parse(codeArea.getText())){
+                    if(Controller.parse(codeArea.getText()) && !ErrorRepository.getInstance().getError()){
                         for(int x=0; x<SymbolTableManager.getInstance().getCommands().size(); x++){
                             SymbolTableManager.getInstance().getCommands().get(0).execute();
                         }
