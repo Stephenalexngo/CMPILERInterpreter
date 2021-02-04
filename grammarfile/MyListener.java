@@ -3,7 +3,6 @@ package grammarfile;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 
-import commandfiles.ForCommand;
 import commandfiles.ICommand;
 import commandfiles.PrintCommand;
 import commandfiles.ScanCommand;
@@ -26,7 +25,6 @@ public class MyListener extends MainBaseListener {
     public String currentFunction = "";
     public int currentNode = 0;
     public boolean isConstant = false;
-    public boolean isInside = false;
     HashMap<String, FuncClass> funcTable = SymbolTableManager.getInstance().getFuncTable();
     ArrayList<ICommand> arrCommand = SymbolTableManager.getInstance().getCommands();
 
@@ -633,26 +631,26 @@ public class MyListener extends MainBaseListener {
                     printexp += expr;
                 }
             } else if (ctx.extended_value_print().get(x).LABEL() != null) {
-                    String key = ctx.extended_value_print().get(x).LABEL().getText();
-                    if (!funcTable.get(currentFunction).getVarTable().containsKey(key)
-                            && !funcTable.get(currentFunction).getVarArrTable().containsKey(key)) {
-                        errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", key, ctx.getStart().getLine());
+                String key = ctx.extended_value_print().get(x).LABEL().getText();
+                if (!funcTable.get(currentFunction).getVarTable().containsKey(key)
+                        && !funcTable.get(currentFunction).getVarArrTable().containsKey(key)) {
+                    errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", key, ctx.getStart().getLine());
+                }
+                else{
+                    if (!key.equals("null")) {
+                        printexp += funcTable.get(currentFunction).getVarTable().get(key).getValue();
                     }
-                    else{
-                        if (!key.equals("null")) {
-                            printexp += funcTable.get(currentFunction).getVarTable().get(key).getValue();
-                        }
-                    }
+                }
             }
             else {
                 printexp += ctx.extended_value_print().get(x).STRING_TYPE().getText().replace("\"", "");
             }
         }
-        if(!isInside){
-            PrintCommand print = new PrintCommand(printexp,currentFunction);
-            arrCommand.add(print);
-            SymbolTableManager.getInstance().setCommands(arrCommand);
-        }
+        PrintCommand print = new PrintCommand(printexp,currentFunction);
+        //System.out.println(funcTable.get(currentFunction).getVarTable().get("x").getValue());
+        //System.out.println("PRINT");
+        arrCommand.add(print);
+        SymbolTableManager.getInstance().setCommands(arrCommand);
     }
 
     @Override
@@ -888,127 +886,56 @@ public class MyListener extends MainBaseListener {
                         }
                     }else{
                         if(ctx.number().FLOAT_NUMBER() == null){
-        if(ctx.OPEN_BRACE(0) == null){
-            if(funcTable.get(currentFunction).getVarTable().get(varName).getDepth() <= currentNode){
-                if(!funcTable.get(currentFunction).getVarTable().containsKey(varName)){
-                    errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", varName, ctx.getStart().getLine());
-                }else{
-                    if(funcTable.get(currentFunction).getVarTable().get(varName).isConstant()){
-                        errorRepo.reportErrorMessage("CONSTANT_REASSIGNMENT", varName, ctx.getStart().getLine());
-                    }else if(funcTable.get(currentFunction).getVarTable().get(varName).getType().equals("int")){
-                        if(ctx.number() == null){
                             errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
-                        }else if(ctx.function_calling() != null){
-                            if(!funcTable.get(ctx.function_calling().LABEL().toString()).getType().equals("int")){
-                                errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
-                            }else{
-                                funcTable.get(currentFunction).getVarTable().put(varName, 
-                                new VarClass("int", varName, "0", currentFunction, currentNode, false));
-                            }
-                        }else if(ctx.expression(2) != null){
-                            Token first = ctx.expression(2).start;
-                            Token last = ctx.expression(2).stop;
-                            String expr = convertExpression(tokens.getTokens(first.getTokenIndex(), last.getTokenIndex()),
-                                    funcTable.get(currentFunction).getVarTable());
-                                    
-                            if (expr.contains(".")){
-                                errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.expression().toString(), ctx.getStart().getLine());
-                            }else{
-                                EvalEx = new Expression(expr);
-                                BigDecimal result = EvalEx.eval();
-                                String value = result.intValue() + "";
-        
-                                funcTable.get(currentFunction).getVarTable().put(varName,
-                                        new VarClass("int", varName, value, currentFunction, currentNode, isConstant));
-                            }
-                        }else{
-                            if(ctx.number().INT_NUMBER() == null){
-                                errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
-                            }else{
-                                funcTable.get(currentFunction).getVarTable().put(varName, 
-                                new VarClass("int", varName, ctx.number().INT_NUMBER().getText(), currentFunction, currentNode, isConstant));
-                            }
-                        }
-                        
-                    }else if(funcTable.get(currentFunction).getVarTable().get(varName).getType().equals("float")){
-                        if(ctx.number() == null){
-                            errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
-                        }else if(ctx.function_calling() != null){
-                            if(!funcTable.get(ctx.function_calling().LABEL().toString()).getType().equals("float")){
-                                errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
-                            }else{
-                                funcTable.get(currentFunction).getVarTable().put(varName, 
-                                new VarClass("float", varName, "0", currentFunction, currentNode, false));
-                            }
-                        }else if(ctx.expression(2) != null){
-                            Token first = ctx.expression(2).start;
-                            Token last = ctx.expression(2).stop;
-                            String expr = convertExpression(tokens.getTokens(first.getTokenIndex(), last.getTokenIndex()),
-                                    funcTable.get(currentFunction).getVarTable());
-                                    
-                            if (!expr.contains(".")){
-                                errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.expression().toString(), ctx.getStart().getLine());
-                            }else{
-                                EvalEx = new Expression(expr);
-                                BigDecimal result = EvalEx.eval();
-                                String value = result.intValue() + "";
-        
-                                funcTable.get(currentFunction).getVarTable().put(varName,
-                                        new VarClass("float", varName, value, currentFunction, currentNode, isConstant));
-                            }
-                        }else{
-                            if(ctx.number().FLOAT_NUMBER() == null){
-                                errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
-                            }else{
-                                funcTable.get(currentFunction).getVarTable().put(varName, 
-                                new VarClass("float", varName, ctx.number().FLOAT_NUMBER().getText(), currentFunction, currentNode, isConstant));
-                            }
-                        }
-                    }else if(funcTable.get(currentFunction).getVarTable().get(varName).getType().equals("bool")){
-                        if(ctx.comparison_statement() == null){
-                            errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
-                        }else if(ctx.function_calling() != null){
-                            if(!funcTable.get(ctx.function_calling().LABEL().toString()).getType().equals("bool")){
-                                errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
-                            }else{
-                                Token first = ctx.comparison_statement().start;
-                                Token last = ctx.comparison_statement().stop;
-                                String expr = convertLogical(tokens.getTokens(first.getTokenIndex(), last.getTokenIndex()),
-                                funcTable.get(currentFunction).getVarTable());
-            
-                                if (!expr.contains("")){
-                                    EvalEx = new Expression(expr);
-                                    BigDecimal result = EvalEx.eval();
-            
-                                    String value = result.intValue() + "";
-            
-                                    funcTable.get(currentFunction).getVarTable().put(varName,
-                                        new VarClass("bool", varName, value, currentFunction, currentNode, isConstant));
-                                }else{
-                                    errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.expression().toString(), ctx.getStart().getLine());
-                                }
-                            }
-                        }
-                    }else if(funcTable.get(currentFunction).getVarTable().get(varName).getType().equals("String")){
-                        if(ctx.STRING_TYPE() == null){
-                            errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
-                        }else if(ctx.function_calling() != null){
-                            if(!funcTable.get(ctx.function_calling().LABEL().toString()).getType().equals("String")){
-                                errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
-                            }else{
-                                funcTable.get(currentFunction).getVarTable().put(varName, 
-                                new VarClass("float", varName, "0", currentFunction, currentNode, false));
-                            }
                         }else{
                             funcTable.get(currentFunction).getVarTable().put(varName, 
-                                new VarClass("float", varName, ctx.STRING_TYPE().getText(), currentFunction, currentNode, false));
+                            new VarClass("float", varName, ctx.number().FLOAT_NUMBER().getText(), currentFunction, currentNode, isConstant));
                         }
                     }
+                }else if(funcTable.get(currentFunction).getVarTable().get(varName).getType().equals("bool")){
+                    if(ctx.comparison_statement() == null){
+                        errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
+                    }else if(ctx.function_calling() != null){
+                        if(!funcTable.get(ctx.function_calling().LABEL().toString()).getType().equals("bool")){
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
+                        }else{
+                            Token first = ctx.comparison_statement().start;
+                            Token last = ctx.comparison_statement().stop;
+                            String expr = convertLogical(tokens.getTokens(first.getTokenIndex(), last.getTokenIndex()),
+                            funcTable.get(currentFunction).getVarTable());
+        
+                            if (!expr.contains("")){
+                                EvalEx = new Expression(expr);
+                                BigDecimal result = EvalEx.eval();
+        
+                                String value = result.intValue() + "";
+        
+                                funcTable.get(currentFunction).getVarTable().put(varName,
+                                    new VarClass("bool", varName, value, currentFunction, currentNode, isConstant));
+                            }else{
+                                errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.expression().toString(), ctx.getStart().getLine());
+                            }
+                        }
+                    }
+                }else if(funcTable.get(currentFunction).getVarTable().get(varName).getType().equals("String")){
+                    if(ctx.STRING_TYPE() == null){
+                        errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
+                    }else if(ctx.function_calling() != null){
+                        if(!funcTable.get(ctx.function_calling().LABEL().toString()).getType().equals("String")){
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
+                        }else{
+                            funcTable.get(currentFunction).getVarTable().put(varName, 
+                            new VarClass("float", varName, "0", currentFunction, currentNode, false));
+                        }
+                    }else{
+                        funcTable.get(currentFunction).getVarTable().put(varName, 
+                            new VarClass("float", varName, ctx.STRING_TYPE().getText(), currentFunction, currentNode, false));
+                    }
                 }
-            }else{
-                errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", varName,  ctx.getStart().getLine());
-            } 
-        }
+            }
+        }else{
+            errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", varName,  ctx.getStart().getLine());
+        } 
     }
 
     @Override public void enterConditional_statement(MainParser.Conditional_statementContext ctx) { 
@@ -1051,7 +978,6 @@ public class MyListener extends MainBaseListener {
 
 	@Override public void enterFor_statement(MainParser.For_statementContext ctx) { 
         currentNode++;
-        isInside = true;
         String first_value = "0";
 
         if(ctx.loop_variable_declaration().expression() != null){
@@ -1074,21 +1000,10 @@ public class MyListener extends MainBaseListener {
         Token second_exp_stop = ctx.loop_structure().expression().stop;
         String second_value = convertLogical(tokens.getTokens(second_exp_start.getTokenIndex(), second_exp_stop.getTokenIndex()),
         funcTable.get(currentFunction).getVarTable());
-
-        String comparator = "";
-        if(ctx.loop_structure().DOWN_TO() != null)
-            comparator = ctx.loop_structure().DOWN_TO().getText();
-        else
-            comparator = ctx.loop_structure().UP_TO().getText();
-        System.out.println(comparator);
-        ForCommand forcommand = new ForCommand(first_value, second_value,comparator , arrCommand);
-        arrCommand.add(forcommand);
-        SymbolTableManager.getInstance().setCommands(arrCommand);
     }
 
 	@Override public void exitFor_statement(MainParser.For_statementContext ctx) { 
         removeNodes();
-        isInside = false;
         currentNode--;
     }
 

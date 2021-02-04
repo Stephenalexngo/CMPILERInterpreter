@@ -32,7 +32,7 @@ assignment_statement: LABEL (OPEN_BRACE expression CLOSE_BRACE)? ASSIGN (LABEL (
 
 // print statement
 print_statement: PRINT OPEN_PAREN extended_value_print (PLUS extended_value_print)* CLOSE_PAREN;
-extended_value_print: STRING_TYPE | LABEL | LABEL OPEN_BRACE expression CLOSE_BRACE |function_calling | expression;
+extended_value_print: STRING_TYPE | LABEL | function_calling | expression;
 
 // scan statement
 scan_statement: SCAN OPEN_PAREN STRING_TYPE COMMA LABEL CLOSE_PAREN;

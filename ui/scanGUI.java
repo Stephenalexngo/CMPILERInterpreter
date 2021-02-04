@@ -68,7 +68,6 @@ public class scanGUI {
             @Override
             public void handle(ActionEvent event) {
                 funcTable.get(currFunc).getVarTable().get(varName).setValue(inputText.getText());
-                SymbolTableManager.getInstance().getScanCommands().add(inputText.getText());
                 primaryStage.close();
             }
         });

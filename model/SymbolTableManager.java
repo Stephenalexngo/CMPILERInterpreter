@@ -7,12 +7,10 @@ public class SymbolTableManager {
     private static HashMap<String, FuncClass> funcTable;
     private static SymbolTableManager INSTANCE = null;
     private static ArrayList<ICommand> arrCommands;
-    private static ArrayList<String> scanCommands;
 
     private SymbolTableManager(){
         funcTable = new HashMap<String, FuncClass>();
         arrCommands = new ArrayList<ICommand>();
-        scanCommands = new ArrayList<String>();
     }
 
     public static void initialize(){
@@ -32,14 +30,6 @@ public class SymbolTableManager {
 
     public ArrayList<ICommand> getCommands(){
         return this.arrCommands;
-    }
-
-    public void setScanCommands(ArrayList<String> scanCommands){
-        this.scanCommands = scanCommands;
-    }
-
-    public ArrayList<String> getScanCommands(){
-        return this.scanCommands;
     }
 
     public HashMap<String, FuncClass> getFuncTable(){
