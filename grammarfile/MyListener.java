@@ -625,6 +625,9 @@ public class MyListener extends MainBaseListener {
                         funcTable.get(currentFunction).getVarTable());
 
                 if (!expr.equals("null")) {
+                    EvalEx = new Expression(expr);
+                    BigDecimal value = EvalEx.eval();
+                    expr = value.floatValue() + "";;
                     printexp += expr;
                 }
             } else if (ctx.extended_value_print().get(x).LABEL() != null) {
@@ -816,8 +819,12 @@ public class MyListener extends MainBaseListener {
                 if(funcTable.get(currentFunction).getVarTable().get(varName).isConstant()){
                     errorRepo.reportErrorMessage("CONSTANT_REASSIGNMENT", varName, ctx.getStart().getLine());
                 }else if(funcTable.get(currentFunction).getVarTable().get(varName).getType().equals("int")){
-                    if(ctx.number() == null){
-                        errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
+                    if(ctx.number() != null){
+                        if(ctx.number().FLOAT_NUMBER() != null){
+                            errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
+                        }else{
+                            funcTable.get(currentFunction).getVarTable().get(varName).setValue(ctx.number().INT_NUMBER().getText());
+                        }
                     }else if(ctx.function_calling() != null){
                         if(!funcTable.get(ctx.function_calling().LABEL().toString()).getType().equals("int")){
                             errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
@@ -825,9 +832,9 @@ public class MyListener extends MainBaseListener {
                             funcTable.get(currentFunction).getVarTable().put(varName, 
                             new VarClass("int", varName, "0", currentFunction, currentNode, false));
                         }
-                    }else if(ctx.expression(2) != null){
-                        Token first = ctx.expression(2).start;
-                        Token last = ctx.expression(2).stop;
+                    }else if(ctx.expression(0) != null){
+                        Token first = ctx.expression(0).start;
+                        Token last = ctx.expression(0).stop;
                         String expr = convertExpression(tokens.getTokens(first.getTokenIndex(), last.getTokenIndex()),
                                 funcTable.get(currentFunction).getVarTable());
                                 
@@ -841,14 +848,15 @@ public class MyListener extends MainBaseListener {
                             funcTable.get(currentFunction).getVarTable().put(varName,
                                     new VarClass("int", varName, value, currentFunction, currentNode, isConstant));
                         }
-                    }else{
-                        if(ctx.number().INT_NUMBER() == null){
-                            errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
-                        }else{
-                            funcTable.get(currentFunction).getVarTable().put(varName, 
-                            new VarClass("int", varName, ctx.number().INT_NUMBER().getText(), currentFunction, currentNode, isConstant));
-                        }
                     }
+                    // }else{
+                    //     if(ctx.number().INT_NUMBER() == null){
+                    //         errorRepo.reportErrorMessage("TYPE_MISMATCH", varName, ctx.getStart().getLine());
+                    //     }else{
+                    //         funcTable.get(currentFunction).getVarTable().put(varName, 
+                    //         new VarClass("int", varName, ctx.number().INT_NUMBER().getText(), currentFunction, currentNode, isConstant));
+                    //     }
+                    // }
                     
                 }else if(funcTable.get(currentFunction).getVarTable().get(varName).getType().equals("float")){
                     if(ctx.number() == null){

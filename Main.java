@@ -1,5 +1,3 @@
-import com.udojava.evalex.Expression;
-
 import javafx.application.Application;
 import ui.*;
 
