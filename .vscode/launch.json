@@ -8,9 +8,9 @@
             "type": "java",
             "name": "Launch Main",
             "request": "launch",
-            "vmArgs": "--module-path C:/Users/User/Documents/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml",
+            "vmArgs": "--module-path C:/Users/steph/Documents/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml",
             "mainClass": "Main",
-            "projectName": "CMPILERInterpreter_7fbfb734"
+            "projectName": "CMPILERInterpreter_cdde3fc"
         }
     ]
 }
