@@ -2,6 +2,7 @@ package commandfiles;
 
 import java.util.HashMap;
 
+import model.SymbolTableManager;
 import model.VarClass;
 import ui.scanGUI;
 
@@ -11,7 +12,6 @@ public class ScanCommand implements ICommand {
     private String currFunc;
     private String varName;
     private int depth;
-    private HashMap<String, VarClass> varTable;
 
     public ScanCommand(String label, String varName, String currFunc, int depth){
         this.label = label;
