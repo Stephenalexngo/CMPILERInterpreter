@@ -642,10 +642,12 @@ public class MyListener extends MainBaseListener {
                         funcTable.get(currentFunction).getVarTable());
 
                 if (!expr.equals("null")) {
-                    EvalEx = new Expression(expr);
-                    BigDecimal value = EvalEx.eval();
-                    expr = value.floatValue() + "";;
-                    printexp += expr;
+                    if(!expr.contains("[")){
+                        EvalEx = new Expression(expr);
+                        BigDecimal value = EvalEx.eval();
+                        expr = value.floatValue() + "";;
+                        printexp += expr;
+                    }
                 }
             } else if (ctx.extended_value_print().get(x).LABEL() != null) {
                 String key = ctx.extended_value_print().get(x).LABEL().getText();
