@@ -2,16 +2,9 @@ package commandfiles;
 
 import ui.gui;
 
-import java.math.BigDecimal;
-
-import com.udojava.evalex.Expression;
-
 public class PrintCommand implements ICommand{
     
     private String expr;
-
-    public Expression EvalEx;
-    
 
     public PrintCommand(String expression, String currFunc){
         this.expr = expression;
