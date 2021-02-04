@@ -1,0 +1,14 @@
+main(){
+    int x = 0;
+    int y = 0;
+    
+    scan("Enter table size", x);
+    y = x;
+
+    for 1 up to x + 1{
+        for 1 up to y + 1{
+            print(x * y + " ");
+        }
+        print("\n");
+    }
+}

@@ -1,0 +1,25 @@
+main(){
+    int x=0;
+    int y=0;
+    int z=0;
+    int a=0;
+    int b=0;
+    int c=0;
+    int[] arr = create int[5];
+
+    scan("Enter number 1: ", x);
+    scan("Enter number 2: ", y);
+    scan("Enter number 3: ", z);
+    scan("Enter number 4: ", a);
+    scan("Enter number 5: ", b);
+
+    arr[0] = x;
+    arr[1] = y;
+    arr[2] = z;
+    arr[3] = a;
+    arr[4] = b;
+
+    for c down to 5 {
+        print(arr[c]);
+    }
+}

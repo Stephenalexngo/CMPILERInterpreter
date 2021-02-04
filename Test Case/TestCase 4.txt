@@ -1,0 +1,27 @@
+main(){
+  int x = 0;
+  int y = 0;
+  int z = 0;
+  int ctr = 0;
+  char c;
+  char[] b;
+
+  scan("How many number do you want to enter: ", x);
+  for 0 up to x{
+    scan("Enter Number", y);
+    z = z + y;
+  }
+
+  print("You have an array of characters with size" + z)
+  
+  for ctr up to z{
+    scan("Enter Character", c)
+    b[ctr] = c
+  }
+
+  ctr = 0;
+  
+  for ctr up to z{
+    print(b[ctr]);
+  }
+}
