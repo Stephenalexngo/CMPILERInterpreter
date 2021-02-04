@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 import com.udojava.evalex.Expression;
 
+import model.SymbolTableManager;
+import ui.gui;
+
 public class ForCommand implements ICommand{
 
     private BigDecimal firstOperand;
@@ -25,11 +28,13 @@ public class ForCommand implements ICommand{
     public void execute(){
         if(comparator.equals("up to")){
             for(BigDecimal x = firstOperand; x.compareTo(secondOperand) < 0; x = x.add(BigDecimal.ONE)){
-                // Execute other command
+                gui.getTextArea().appendText(SymbolTableManager.getInstance().getScanCommands().get(x.intValue()) + '\n');
             }
-        }else if(comparator.equals("down to")){
-            for(BigDecimal x = secondOperand; x.compareTo(firstOperand) < 0; x = x.add(BigDecimal.ONE)){
-                // Execute other command
+        }else{
+            int i = secondOperand.intValue() - 1;
+            for(BigDecimal x = firstOperand; x.compareTo(secondOperand) < 0; x = x.add(BigDecimal.ONE)){
+                gui.getTextArea().appendText(SymbolTableManager.getInstance().getScanCommands().get(i) + '\n');
+                i--;
             }
         }
     }
