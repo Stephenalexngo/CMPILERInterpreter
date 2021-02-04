@@ -26,7 +26,7 @@ public class VarArrClass {
         this.parentFunction = parent;
         this.nodeDepth = depth;
         this.isConstant = isConstant;
-        this.values = new String[Integer.parseInt(size)];
+        this.values = new String[10];
     }
 
     public String getType(){

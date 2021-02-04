@@ -158,7 +158,18 @@ public class MyListener extends MainBaseListener {
                                 listtoken.get(x).getLine());
                             return "null";
                         }
-                    } else {
+                    } 
+                    else if(funcTable.get(currentFunction).getParams() != null){
+                        if(funcTable.get(currentFunction).getParams().containsKey(listtoken.get(x).getText())){
+                            if(funcTable.get(currentFunction).getParams().get(listtoken.get(x).getText()).getType().equals("String")){
+                                errorRepo.reportErrorMessage("TYPE_MISMATCH", listtoken.get(x).getText(), listtoken.get(x).getLine());
+                            }
+                            else{
+                                expression += "0";
+                            }
+                        }
+                    }
+                    else {
                         errorRepo.reportErrorMessage("UNDECLARED_VARIABLE", listtoken.get(x).getText(),
                                 listtoken.get(x).getLine());
                         return "null";
@@ -772,7 +783,12 @@ public class MyListener extends MainBaseListener {
         
         if(!funcType.equals("void")){
             if(ctx.LABEL() != null){
-                if(funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().getText())){
+                if(ctx.LABEL().getText().equals("T") || ctx.LABEL().getText().equals("F")){
+                    if(!funcType.equals("bool")){
+                        errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().getText(), ctx.getStart().getLine());
+                    }
+                }
+                else if(funcTable.get(currentFunction).getVarTable().containsKey(ctx.LABEL().getText())){
                     if(!funcTable.get(currentFunction).getVarTable().get(ctx.LABEL().getText()).getType().equals(funcType)){
                         errorRepo.reportErrorMessage("TYPE_MISMATCH", ctx.LABEL().getText(), ctx.getStart().getLine());
                     }
@@ -1052,9 +1068,11 @@ public class MyListener extends MainBaseListener {
         int numReturn = 0;
 
         for(int x=0; x<ctx.function_structure().statements().size(); x++){
-            if(ctx.function_structure().statements().get(x).small_statements().return_statement() != null){
-                hasReturn = true;
-                numReturn++;
+            if(ctx.function_structure().statements().get(x).small_statements() != null){
+                if(ctx.function_structure().statements().get(x).small_statements().return_statement() != null){
+                    hasReturn = true;
+                    numReturn++;
+                }
             }
         }
 
